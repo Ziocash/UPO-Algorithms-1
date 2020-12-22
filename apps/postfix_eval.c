@@ -42,24 +42,94 @@
 int eval_postfix(const char *expr, long *res)
 {
     upo_stack_t stack = upo_stack_create();
-    char* string = malloc(MAX_LINE_LEN);
+    char string[MAX_LINE_LEN] = "";
     strcpy(string, expr);
     char* token = strtok(string, " ");
     long temp = 0;
+    long result = 0;
     while(token != NULL)
     {     
         printf("%s\n", token);
-        token = strtok(NULL, " ");
-        //}                    
+        if(isdigit(*(token)))
+        {
+            sscanf(token, "%ld\n", &temp);
+            printf("%ld\n", temp);
+            upo_stack_push(stack, &temp);
+            printf("Stack size: %ld\n", upo_stack_size(stack));
+            printf("Top -> %ld\n", *((long*) upo_stack_top(stack)));
+        }
+        else if(!isdigit(*(token)))
+        {
+            long num2 = *((long*) upo_stack_top(stack));
+            printf("Stack size: %ld\n", upo_stack_size(stack));
+            upo_stack_pop(stack, 0);
+            printf("Stack size: %ld\n", upo_stack_size(stack));
+            printf("Num 2: %ld\n", num2);
+            long num1 = *((long*) upo_stack_top(stack));
+            upo_stack_pop(stack, 0); 
+            printf("Stack size: %ld\n", upo_stack_size(stack));           
+            printf("Num 1: %ld\n", num1);
+            switch (*(token))
+            {
+            case '+':
+                printf("Addition\n");
+                printf("Stack size: %ld\n", upo_stack_size(stack));
+                result = num1 + num2;
+                printf("Result: %ld\n", result);
+                break;
+            case '-':
+                printf("Subtraction\n");
+                printf("Stack size: %ld\n", upo_stack_size(stack));
+                result = num1 - num2;
+                printf("Result: %ld\n", result);
+                break;
+            case '/':
+                printf("Division\n");
+                printf("Stack size: %ld\n", upo_stack_size(stack));
+                result = num1 / num2;
+                printf("Result: %ld\n", result);
+                break;
+            case '*':
+                printf("Multiplication\n");
+                printf("Stack size: %ld\n", upo_stack_size(stack));
+                result = num1 * num2;
+                printf("Result: %ld\n", result);
+                break;
+            case '%':
+                printf("Modulo\n");
+                printf("Stack size: %ld\n", upo_stack_size(stack));
+                result = num1 % num2;
+                printf("Result: %ld\n", result);
+                break;
+            case '^':
+                printf("Exponentation\n");
+                printf("Stack size: %ld\n", upo_stack_size(stack));
+                result = num1 ^ num2;
+                printf("Result: %ld\n", result);
+                break;                
+            default:
+                printf("Simbol is not recognized.\n");
+                upo_stack_destroy(stack, 1);
+                return 0;
+                break;
+            }
+            printf("Result: %ld\n", result);
+            upo_stack_push(stack, &result);
+            printf("Updated stack: %ld\n", *((long*) upo_stack_top(stack)));
+        }
+        token = strtok(NULL, " ");          
     }
     if(stack->size == 1)
     {
-        int temp = *((int*)upo_stack_top(stack));
-        upo_stack_pop(stack, 1);   
+        res = (long*)upo_stack_top(stack);
+        printf("Result: %ld\n", *(res));
+        upo_stack_pop(stack, 1);  
     }
     else
     {
         fprintf(stderr, "Error: malformed expression\n");
+        upo_stack_destroy(stack, 1);
+        return 0;
     }
     upo_stack_destroy(stack, 1);
     return 1;
@@ -122,7 +192,6 @@ void usage(const char *progname)
     fprintf(stderr, "-h: Displays this message\n");
     fprintf(stderr, "-v: Enables output verbosity\n");
 }
-
 
 int main(int argc, char *argv[])
 {
