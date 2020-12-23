@@ -33,7 +33,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <upo/stack.h>
-#include "../src/stack_private.h"
 
 
 #define MAX_LINE_LEN 256
@@ -45,85 +44,53 @@ int eval_postfix(const char *expr, long *res)
     char string[MAX_LINE_LEN] = "";
     strcpy(string, expr);
     char* token = strtok(string, " ");
-    long temp = 0;
-    long result = 0;
     while(token != NULL)
-    {     
-        printf("%s\n", token);
+    {
         if(isdigit(*(token)))
-        {
-            sscanf(token, "%ld\n", &temp);
-            printf("%ld\n", temp);
-            upo_stack_push(stack, &temp);
-            printf("Stack size: %ld\n", upo_stack_size(stack));
-            printf("Top -> %ld\n", *((long*) upo_stack_top(stack)));
+        { 
+            long *temp = malloc(sizeof(long*));
+            sscanf(token, "%ld", temp);
+            upo_stack_push(stack, temp);
         }
         else if(!isdigit(*(token)))
         {
             long num2 = *((long*) upo_stack_top(stack));
-            printf("Stack size: %ld\n", upo_stack_size(stack));
-            upo_stack_pop(stack, 0);
-            printf("Stack size: %ld\n", upo_stack_size(stack));
-            printf("Num 2: %ld\n", num2);
+            upo_stack_pop(stack, 1);
             long num1 = *((long*) upo_stack_top(stack));
-            upo_stack_pop(stack, 0); 
-            printf("Stack size: %ld\n", upo_stack_size(stack));           
-            printf("Num 1: %ld\n", num1);
+            upo_stack_pop(stack, 1);
             switch (*(token))
             {
             case '+':
-                printf("Addition\n");
-                printf("Stack size: %ld\n", upo_stack_size(stack));
-                result = num1 + num2;
-                printf("Result: %ld\n", result);
+                *res = num1 + num2;
                 break;
             case '-':
-                printf("Subtraction\n");
-                printf("Stack size: %ld\n", upo_stack_size(stack));
-                result = num1 - num2;
-                printf("Result: %ld\n", result);
+                *res = num1 - num2;
                 break;
             case '/':
-                printf("Division\n");
-                printf("Stack size: %ld\n", upo_stack_size(stack));
-                result = num1 / num2;
-                printf("Result: %ld\n", result);
+                *res = num1 / num2;
                 break;
             case '*':
-                printf("Multiplication\n");
-                printf("Stack size: %ld\n", upo_stack_size(stack));
-                result = num1 * num2;
-                printf("Result: %ld\n", result);
+                *res = num1 * num2;
                 break;
             case '%':
-                printf("Modulo\n");
-                printf("Stack size: %ld\n", upo_stack_size(stack));
-                result = num1 % num2;
-                printf("Result: %ld\n", result);
+                *res = num1 % num2;
                 break;
             case '^':
-                printf("Exponentation\n");
-                printf("Stack size: %ld\n", upo_stack_size(stack));
-                result = num1 ^ num2;
-                printf("Result: %ld\n", result);
+                *res = (long)pow(num1, num2);
                 break;                
             default:
-                printf("Simbol is not recognized.\n");
-                upo_stack_destroy(stack, 1);
+                //upo_stack_destroy(stack, 1);
                 return 0;
                 break;
             }
-            printf("Result: %ld\n", result);
-            upo_stack_push(stack, &result);
-            printf("Updated stack: %ld\n", *((long*) upo_stack_top(stack)));
+            upo_stack_push(stack, res);
         }
-        token = strtok(NULL, " ");          
+        token = strtok(NULL, " ");         
     }
-    if(stack->size == 1)
+    if(upo_stack_size(stack) == 1)
     {
         res = (long*)upo_stack_top(stack);
-        printf("Result: %ld\n", *(res));
-        upo_stack_pop(stack, 1);  
+        upo_stack_pop(stack, 0);
     }
     else
     {
