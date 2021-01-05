@@ -37,6 +37,26 @@
 
 #define MAX_LINE_LEN 256
 
+int check_operand(char token)
+{
+    switch (token)
+    {
+        case '+':
+            return 1;
+        case '-':
+            return 1;
+        case '/':
+            return 1;
+        case '*':
+            return 1;
+        case '%':
+            return 1;
+        case '^':
+            return 1;                
+        default:
+            return 0;
+    }
+}
 
 int eval_postfix(const char *expr, long *res)
 {
@@ -52,38 +72,45 @@ int eval_postfix(const char *expr, long *res)
             sscanf(token, "%ld", temp);
             upo_stack_push(stack, temp);
         }
-        else if(!isdigit(*(token)))
+        else if(check_operand(*(token)))
         {
-            long num2 = *((long*) upo_stack_top(stack));
-            upo_stack_pop(stack, 1);
-            long num1 = *((long*) upo_stack_top(stack));
-            upo_stack_pop(stack, 1);
-            switch (*(token))
+            if(upo_stack_size(stack) >= 2)
             {
-            case '+':
-                *res = num1 + num2;
-                break;
-            case '-':
-                *res = num1 - num2;
-                break;
-            case '/':
-                *res = num1 / num2;
-                break;
-            case '*':
-                *res = num1 * num2;
-                break;
-            case '%':
-                *res = num1 % num2;
-                break;
-            case '^':
-                *res = (long)pow(num1, num2);
-                break;                
-            default:
-                //upo_stack_destroy(stack, 1);
-                return 0;
-                break;
+                long num2 = *((long*) upo_stack_top(stack));
+                upo_stack_pop(stack, 1);
+                long num1 = *((long*) upo_stack_top(stack));
+                upo_stack_pop(stack, 1);
+                switch (*(token))
+                {
+                case '+':
+                    *res = num1 + num2;
+                    break;
+                case '-':
+                    *res = num1 - num2;
+                    break;
+                case '/':
+                    *res = num1 / num2;
+                    break;
+                case '*':
+                    *res = num1 * num2;
+                    break;
+                case '%':
+                    *res = num1 % num2;
+                    break;
+                case '^':
+                    *res = (long)pow(num1, num2);
+                    break;                
+                default:
+                    //upo_stack_destroy(stack, 1);
+                    return 0;
+                }
+                upo_stack_push(stack, res);
             }
-            upo_stack_push(stack, res);
+            else
+            {
+                upo_stack_destroy(stack, 1);
+                return 0;
+            }            
         }
         token = strtok(NULL, " ");         
     }
@@ -94,7 +121,6 @@ int eval_postfix(const char *expr, long *res)
     }
     else
     {
-        fprintf(stderr, "Error: malformed expression\n");
         upo_stack_destroy(stack, 1);
         return 0;
     }
