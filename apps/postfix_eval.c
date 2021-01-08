@@ -5,7 +5,7 @@
  *
  * \brief An application to evaluate postfix mathematical expressions.
  *
- * \author Your Name
+ * \author Simone Gattini, Federico Barbero, Anton Iliev
  *
  * \copyright 2015 University of Piemonte Orientale, Computer Science Institute
  *

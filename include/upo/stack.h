@@ -13,7 +13,7 @@
  * A Stack is often called a Last-in First-out (LIFO) container since the last
  * element that is added is the first to be removed.
  *
- * \author Your Name
+ * \author Simone Gattini, Federico Barbero, Anton Iliev
  *
  * \copyright 2015 University of Piemonte Orientale, Computer Science Institute
  *

@@ -11,7 +11,7 @@
  * `pop` operation removes elements from the front of the list.
  * The `top` operation returns the element stored in the front of the list.
  *
- * \author Your Name
+ * \author Simone Gattini, Federico Barbero, Anton Iliev
  *
  * \copyright 2015 University of Piemonte Orientale, Computer Science Institute
  *

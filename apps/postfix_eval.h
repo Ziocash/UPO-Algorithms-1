@@ -16,7 +16,7 @@
  * .
  * Every operator takes exactly two arguments.
  *
- * \author Your Name
+ * \author Simone Gattini, Federico Barbero, Anton Iliev
  *
  * \copyright 2015 University of Piemonte Orientale, Computer Science Institute
  *
