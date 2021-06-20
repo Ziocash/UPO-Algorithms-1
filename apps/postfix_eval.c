@@ -76,6 +76,7 @@ int eval_postfix(const char *expr, long *res)
         {
             if(upo_stack_size(stack) >= 2)
             {
+                long *tempres = (long*)malloc(sizeof(long));
                 long num2 = *((long*) upo_stack_top(stack));
                 upo_stack_pop(stack, 1);
                 long num1 = *((long*) upo_stack_top(stack));
@@ -83,28 +84,28 @@ int eval_postfix(const char *expr, long *res)
                 switch (*(token))
                 {
                 case '+':
-                    *res = num1 + num2;
+                    *tempres = num1 + num2;
                     break;
                 case '-':
-                    *res = num1 - num2;
+                    *tempres = num1 - num2;
                     break;
                 case '/':
-                    *res = num1 / num2;
+                    *tempres = num1 / num2;
                     break;
                 case '*':
-                    *res = num1 * num2;
+                    *tempres = num1 * num2;
                     break;
                 case '%':
-                    *res = num1 % num2;
+                    *tempres = num1 % num2;
                     break;
                 case '^':
-                    *res = (long)pow(num1, num2);
+                    *tempres = (long)pow(num1, num2);
                     break;                
                 default:
                     //upo_stack_destroy(stack, 1);
                     return 0;
                 }
-                upo_stack_push(stack, res);
+                upo_stack_push(stack, tempres);
             }
             else
             {
@@ -116,8 +117,8 @@ int eval_postfix(const char *expr, long *res)
     }
     if(upo_stack_size(stack) == 1)
     {
-        res = (long*)upo_stack_top(stack);
-        upo_stack_pop(stack, 0);
+        *res = *(long*)upo_stack_top(stack);
+        upo_stack_pop(stack, 1);
     }
     else
     {
