@@ -5,7 +5,7 @@
  *
  * \brief Private header for the Binary Search Tree abstract data type.
  *
- * \author Your Name
+ * \author Simone Gattini, Federico Barbero, Anton Iliev
  *
  * \copyright 2015 University of Piemonte Orientale, Computer Science Institute
  *
@@ -63,6 +63,24 @@ struct upo_bst_s
  * standard C function.
  */
 static void upo_bst_clear_impl(upo_bst_node_t*, int destroy_data);
+
+static void *upo_bst_delete_impl(upo_bst_node_t *node, const void *key, int destroy_data);
+
+static void *upo_bst_delete_2c_impl(upo_bst_node_t *node, int destroy_data);
+
+static size_t upo_bst_height_impl(upo_bst_node_t *node);
+
+static int upo_bst_is_leaf_impl(upo_bst_node_t *node);
+
+static size_t upo_bst_size_impl(upo_bst_node_t *node);
+
+static size_t upo_bst_size_impl(upo_bst_node_t *node);
+
+static void *upo_bst_max_impl(upo_bst_node_t *node);
+
+static void *upo_bst_get_impl(upo_bst_node_t *node, const void *key);
+
+static void *upo_bst_insert_impl(upo_bst_node_t *node, void *key, void *value);
 
 
 #endif /* UPO_BST_PRIVATE_H */

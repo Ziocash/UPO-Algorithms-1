@@ -77,52 +77,148 @@ void upo_bst_clear(upo_bst_t tree, int destroy_data)
     }
 }
 
+void *upo_bst_node_create(void *key, void *value)
+{
+    upo_bst_node_t *node = malloc(sizeof(upo_bst_node_t));
+    node->key = key;
+    node->value = value; 
+    return node;
+}
+
+void *upo_bst_put_impl(upo_bst_node_t *node, void *key, void *value, void *oldvalue)
+{
+    oldvalue = NULL;
+    if(node == NULL)
+        return upo_bst_node_create(key, value);
+    else if(key < node->key)
+        node->left = upo_bst_put_impl(node->left, key, value, oldvalue);
+    else if(key > node->key)
+        node->right = upo_bst_put_impl(node->right, key, value, oldvalue);
+    else
+    {
+        oldvalue = node->value;
+        node->value = value;
+    }
+    return node;    
+}
+
 void* upo_bst_put(upo_bst_t tree, void *key, void *value)
 {
-    /* TO STUDENTS:
-     *  Remove the following two lines and put here your implementation. */
-    fprintf(stderr, "To be implemented!\n");
-    abort();
+    void *oldvalue = NULL;
+    tree->root = upo_bst_put_impl(tree->root, key, value, oldvalue);
+}
+
+void *upo_bst_insert_impl(upo_bst_node_t *node, void *key, void *value)
+{
+    if(node == NULL)
+        return upo_bst_node_create(key, value);
+    else if(key < node->key)
+        node->left = upo_bst_insert_impl(node->left, key, value);
+    else if(key > node->key)
+        node->right = upo_bst_insert_impl(node->right, key, value);
+
+    return node;
 }
 
 void upo_bst_insert(upo_bst_t tree, void *key, void *value)
 {
-    /* TO STUDENTS:
-     *  Remove the following two lines and put here your implementation. */
-    fprintf(stderr, "To be implemented!\n");
-    abort();
+    tree->root = upo_bst_insert_impl(tree->root, key, value);
 }
 
 void* upo_bst_get(const upo_bst_t tree, const void *key)
 {
-    /* TO STUDENTS:
-     *  Remove the following two lines and put here your implementation. */
-    fprintf(stderr, "To be implemented!\n");
-    abort();
+    upo_bst_node_t *node = upo_bst_get_impl(tree->root, key);
+
+    if(node != NULL)
+        return node->value;
+    return NULL;
+}
+
+void *upo_bst_get_impl(upo_bst_node_t *node, const void *key)
+{
+    if(node == NULL)
+        return NULL;
+
+    if(key < node->key)
+        return upo_bst_get_impl(node->left, key);
+    else if (key > node->key)
+        return upo_bst_get_impl(node->right, key);
+    else
+        return node;    
 }
 
 int upo_bst_contains(const upo_bst_t tree, const void *key)
 {
-    /* TO STUDENTS:
-     *  Remove the following two lines and put here your implementation. */
-    fprintf(stderr, "To be implemented!\n");
-    abort();
+    if(tree == NULL)
+        return 0;
+    
+    if(upo_bst_get_impl(tree->root, key) != NULL)
+        return 1;
+    return 0;
+}
+
+void upo_bst_destroy_node(upo_bst_node_t *node, int destroy_data)
+{
+    if(node == NULL)
+        return;
+    
+    if(destroy_data)
+    {
+        free(node->key);
+        free(node->value);
+    }
+    free(node);
+}
+
+void *upo_bst_delete_2c_impl(upo_bst_node_t *node, int destroy_data)
+{
+    upo_bst_node_t *temp = upo_bst_max_impl(node->left);
+    node->key = temp->key;
+    node->value = temp->value;
+    node->left = upo_bst_delete_impl(node->left, temp->key, destroy_data);
+    return node;
+}
+
+void *upo_bst_delete_1c_impl(upo_bst_node_t *node, int destroy_data)
+{
+    upo_bst_node_t *temp = node;
+    if(node->left != NULL)
+        node = node->left;
+    else
+        node = node->right;
+    upo_bst_destroy_node(temp, destroy_data);
+    return node;
+}
+
+void *upo_bst_delete_impl(upo_bst_node_t *node, const void *key, int destroy_data)
+{
+    if(node == NULL)
+        return NULL;
+    
+    if(key < node->key)
+        node->left = upo_bst_delete_impl(node->left, key, destroy_data);
+    else if(key > node->key)
+        node->right = upo_bst_delete_impl(node->right, key, destroy_data);
+    else if(node->left != NULL && node->right != NULL)
+        node = upo_bst_delete_2c_impl(node, destroy_data);
+    else
+        node = upo_bst_delete_1c_impl(node, destroy_data);
+    return node;
+}
+
+void *upo_bst_max_impl(upo_bst_node_t *node)
+{
+    if(node == NULL)
+        return NULL;
+    else if(node->right != NULL)
+        return upo_bst_max_impl(node->right);
+    else
+        return node;
 }
 
 void upo_bst_delete(upo_bst_t tree, const void *key, int destroy_data)
 {
-    /* TO STUDENTS:
-     *  Remove the following two lines and put here your implementation. */
-    fprintf(stderr, "To be implemented!\n");
-    abort();
-}
-
-size_t upo_bst_size(const upo_bst_t tree)
-{
-    if(tree == NULL)
-    {
-        return 0;
-    }
+    tree->root = upo_bst_delete_impl(tree->root, key, destroy_data);
 }
 
 size_t upo_bst_size_impl(upo_bst_node_t *node)
@@ -134,12 +230,32 @@ size_t upo_bst_size_impl(upo_bst_node_t *node)
     return 1 + upo_bst_size_impl(node->left) + upo_bst_size_impl(node->right);    
 }
 
+size_t upo_bst_size(const upo_bst_t tree)
+{
+    if(tree == NULL)
+    {
+        return 0;
+    }
+    return upo_bst_size_impl(tree->root);
+}
+
+int upo_bst_is_leaf_impl(upo_bst_node_t *node)
+{
+    if(node->left == NULL && node->right == NULL)
+        return 1;
+    return 0;
+}
+
+size_t upo_bst_height_impl(upo_bst_node_t *node)
+{
+    if(node == NULL || upo_bst_is_leaf_impl(node))
+        return 0;
+    return 1 + max(upo_bst_height_impl(node->left), upo_bst_height_impl(node->left));
+}
+
 size_t upo_bst_height(const upo_bst_t tree)
 {
-    /* TO STUDENTS:
-     *  Remove the following two lines and put here your implementation. */
-    fprintf(stderr, "To be implemented!\n");
-    abort();
+    return upo_bst_height_impl(tree->root);
 }
 
 void upo_bst_traverse_in_order(const upo_bst_t tree, upo_bst_visitor_t visit, void *visit_context)
