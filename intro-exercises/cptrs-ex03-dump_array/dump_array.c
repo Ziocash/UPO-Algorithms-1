@@ -47,7 +47,6 @@ int main()
 {
     int iary[] = {1, 20, 25, 32, 76, 123};
     const char *sary[] = {"e01", "e02", "e03", "e04", "e05", "e06"};
-    const char *array[] = {"a01"};
     FILE *fp = stdout;
 
     dump_array(iary, sizeof iary / sizeof iary[0], sizeof iary[0], dump_int, fp);
