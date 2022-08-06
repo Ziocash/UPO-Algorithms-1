@@ -43,6 +43,15 @@ void dump_array(const void *base, size_t num_elem, size_t elem_size, void (*dump
 
 2 - `dump_int` as dumper function, passed by reference to `dump_array` with declaration: `void (*dump_element)(const void *, FILE *)`
 
+Code consists in a cast from `void *` to desired type (in this case `int` as `dump_int` function) and accessing value from pointer.
+
+```c
+//casting (implicit from void* to int*) to access value 
+const int *value = p;
+```
+
+Implementation:
+
 ```c
 void dump_int(const void *p, FILE *fp)
 {
@@ -54,6 +63,18 @@ void dump_int(const void *p, FILE *fp)
 ```
 
 3 - `dump_string` as dumper function, passed by reference to `dump_array` with declaration: `void (*dump_element)(const void *, FILE *)`
+
+Code consists in a cast from `void *` to desired type (in this case `char *` as `dump_string` function) and accessing value from pointer.
+
+```c
+//casting (explicit) from void* to char* to access string value 
+const char *temp = *((char **)p);
+fprintf(fp, "%s", temp);
+// can be done also passing pointer directly to fprintf
+fprintf(fp, "%s", *((char **)p));
+```
+
+Implementation:
 
 ```c
 void dump_string(const void *p, FILE *fp)
