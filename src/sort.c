@@ -25,44 +25,39 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include <upo/utility.h>
 
 void upo_insertion_sort(void *base, size_t n, size_t size, upo_sort_comparator_t cmp)
 {
-    unsigned char *ptr = base;
-    unsigned char *aux = NULL;
+    assert(base != NULL);
+    assert(n > 0);
+    assert(size > 0);
+    assert(cmp != NULL);
 
-    aux = malloc(n*size);
-    if (aux == NULL)
+    unsigned char *ptr = base, *current = NULL, *previous = NULL;
+
+    for (int i = 1; i < n; ++i)
     {
-        perror("Unable to allocate memory for auxiliary vector");
-        abort();
-    }
-    memcpy(aux, ptr+n*size, n*size);
-    int i, j, k;
-    for(k = 0; k < n; k++)
-    {
-       
-       for(j = k; j == 0; j--)
-       {
-           if(j > k && cmp(aux+j*size,aux+size))
-                break;
-       }
-       if(j < k)
-       {
-           for(i = k; i < j+1; i--)
-           {
-               memcpy(ptr+i*size, aux+i*size, size);
-           }
-           memcpy(ptr+(j+1)*size, aux+j*size, size);
-       }    
+        int j = i;
+        while (j > 0 && cmp(ptr + j * size, ptr + (j - 1) * size) < 0)
+        {
+            current = ptr + j * size;
+            previous = ptr + (j * size) - (1 * size);
+
+            upo_swap(current, previous, size);
+            j--;
+        }
     }
 }
 
 void upo_merge_sort(void *base, size_t n, size_t size, upo_sort_comparator_t cmp)
 {
-    assert( base != NULL );
-    upo_merge_sort_driver_topdown(base, 0, n-1, size, cmp);
+    assert(base != NULL);
+    assert(n > 0);
+    assert(size > 0);
+    assert(cmp != NULL);
+    
+    upo_merge_sort_driver_topdown(base, 0, n - 1, size, cmp);
 }
 
 void upo_merge_sort_driver_topdown(void *base, size_t lo, size_t hi, size_t size, upo_sort_comparator_t cmp)
@@ -72,12 +67,12 @@ void upo_merge_sort_driver_topdown(void *base, size_t lo, size_t hi, size_t size
     {
         return;
     }
-    //mid = (hi+lo)/2; //WARN: do not use this assignment as it may overflow
-    mid = lo+(hi-lo)/2;
+    // mid = (hi+lo)/2; //WARN: do not use this assignment as it may overflow
+    mid = lo + (hi - lo) / 2;
     // Sorts left half
     upo_merge_sort_driver_topdown(base, lo, mid, size, cmp);
     // Sorts right half
-    upo_merge_sort_driver_topdown(base, mid+1, hi, size, cmp);
+    upo_merge_sort_driver_topdown(base, mid + 1, hi, size, cmp);
     // Merges results
     upo_merge(base, lo, mid, hi, size, cmp);
 }
@@ -86,40 +81,40 @@ void upo_merge(void *base, size_t lo, size_t mid, size_t hi, size_t size, upo_so
 {
     unsigned char *ptr = base;
     unsigned char *aux = NULL;
-    size_t n = hi-lo+1;
+    size_t n = hi - lo + 1;
     size_t i = 0;
-    size_t j = mid+1-lo;
+    size_t j = mid + 1 - lo;
     size_t k;
-    aux = malloc(n*size);
+    aux = malloc(n * size);
     if (aux == NULL)
     {
         perror("Unable to allocate memory for auxiliary vector");
         abort();
     }
     // Copy base[lo],...,base[hi] into the auxiliary array
-    memcpy(aux, ptr+lo*size, n*size);
+    memcpy(aux, ptr + lo * size, n * size);
     // Merge base[lo],...,base[mid] with base[mid+1],...,base[hi].
     // Elements are read from the aux vector and written to the base vector.
     for (k = lo; k <= hi; ++k)
     {
-        if (i > (mid-lo))
+        if (i > (mid - lo))
         {
-            memcpy(ptr+k*size, aux+j*size, size);
+            memcpy(ptr + k * size, aux + j * size, size);
             ++j;
         }
-        else if (j > (hi-lo))
+        else if (j > (hi - lo))
         {
-            memcpy(ptr+k*size, aux+i*size, size);
+            memcpy(ptr + k * size, aux + i * size, size);
             ++i;
         }
-        else if (cmp(aux+j*size, aux+i*size) < 0)
+        else if (cmp(aux + j * size, aux + i * size) < 0)
         {
-            memcpy(ptr+k*size, aux+j*size, size);
+            memcpy(ptr + k * size, aux + j * size, size);
             ++j;
         }
         else
         {
-            memcpy(ptr+k*size, aux+i*size, size);
+            memcpy(ptr + k * size, aux + i * size, size);
             ++i;
         }
     }
