@@ -41,7 +41,7 @@ void upo_insertion_sort(void *base, size_t n, size_t size, upo_sort_comparator_t
         int j = i;
         while (j > 0 && cmp(ptr + j * size, ptr + (j - 1) * size) < 0)
         {
-                current = ptr + j * size;
+            current = ptr + j * size;
             previous = ptr + (j * size) - (1 * size);
 
             upo_swap(current, previous, size);
