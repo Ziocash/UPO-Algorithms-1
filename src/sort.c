@@ -36,12 +36,12 @@ void upo_insertion_sort(void *base, size_t n, size_t size, upo_sort_comparator_t
 
     unsigned char *ptr = base, *current = NULL, *previous = NULL;
 
-    for (int i = 1; i < n; ++i)
+    for (size_t i = 1; i < n; ++i)
     {
         int j = i;
         while (j > 0 && cmp(ptr + j * size, ptr + (j - 1) * size) < 0)
         {
-            current = ptr + j * size;
+                current = ptr + j * size;
             previous = ptr + (j * size) - (1 * size);
 
             upo_swap(current, previous, size);
@@ -56,11 +56,11 @@ void upo_merge_sort(void *base, size_t n, size_t size, upo_sort_comparator_t cmp
     assert(n > 0);
     assert(size > 0);
     assert(cmp != NULL);
-    
-    upo_merge_sort_driver_topdown(base, 0, n - 1, size, cmp);
+
+    upo_merge_sort_rec(base, 0, n - 1, size, cmp);
 }
 
-void upo_merge_sort_driver_topdown(void *base, size_t lo, size_t hi, size_t size, upo_sort_comparator_t cmp)
+void upo_merge_sort_rec(void *base, size_t lo, size_t hi, size_t size, upo_sort_comparator_t cmp)
 {
     size_t mid;
     if (lo >= hi)
@@ -70,14 +70,14 @@ void upo_merge_sort_driver_topdown(void *base, size_t lo, size_t hi, size_t size
     // mid = (hi+lo)/2; //WARN: do not use this assignment as it may overflow
     mid = lo + (hi - lo) / 2;
     // Sorts left half
-    upo_merge_sort_driver_topdown(base, lo, mid, size, cmp);
+    upo_merge_sort_rec(base, lo, mid, size, cmp);
     // Sorts right half
-    upo_merge_sort_driver_topdown(base, mid + 1, hi, size, cmp);
+    upo_merge_sort_rec(base, mid + 1, hi, size, cmp);
     // Merges results
-    upo_merge(base, lo, mid, hi, size, cmp);
+    upo_merge_sort_merge(base, lo, mid, hi, size, cmp);
 }
 
-void upo_merge(void *base, size_t lo, size_t mid, size_t hi, size_t size, upo_sort_comparator_t cmp)
+void upo_merge_sort_merge(void *base, size_t lo, size_t mid, size_t hi, size_t size, upo_sort_comparator_t cmp)
 {
     unsigned char *ptr = base;
     unsigned char *aux = NULL;
@@ -123,8 +123,31 @@ void upo_merge(void *base, size_t lo, size_t mid, size_t hi, size_t size, upo_so
 
 void upo_quick_sort(void *base, size_t n, size_t size, upo_sort_comparator_t cmp)
 {
-    /* TO STUDENTS:
-     *  Remove the following two lines and put here your implementation. */
-    fprintf(stderr, "To be implemented!\n");
-    // abort();
+    upo_quick_sort_rec(base, 0, n - 1, size, cmp);
+}
+
+void upo_quick_sort_rec(void *base, size_t lo, size_t hi, size_t size, upo_sort_comparator_t cmp)
+{
+    if (lo >= hi)
+        return;
+    size_t j = upo_quick_sort_partition(base, lo, hi, size, cmp);
+    if (j > 0)
+        upo_quick_sort_rec(base, lo, j - 1, size, cmp);
+    upo_quick_sort_rec(base, j + 1, hi, size, cmp);
+}
+
+size_t upo_quick_sort_partition(void *base, size_t lo, size_t hi, size_t size, upo_sort_comparator_t cmp)
+{
+    size_t p = lo, i = lo, j = hi;
+    unsigned char *array = base;
+    while (i < j)
+    {
+        while ((i < hi) && (cmp(array + i * size, array + p * size) < 0))
+            i++;
+        while ((j > lo) && (cmp(array + j * size, array + p * size) > 0))
+            j--;
+        upo_swap(array + i * size, array + j * size, size);
+    }
+    upo_swap(array + p * size, array + j * size, size);
+    return j;
 }
