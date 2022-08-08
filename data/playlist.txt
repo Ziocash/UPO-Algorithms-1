@@ -1,0 +1,70 @@
+|Bruce Springsteen|Born in the U.S.A.|1984| 1|Born in the U.S.A.|
+|Bruce Springsteen|Born in the U.S.A.|1984| 2|Cover Me|
+|Bruce Springsteen|Born in the U.S.A.|1984| 3|Darlington County|
+|Bruce Springsteen|Born in the U.S.A.|1984| 4|Working on the Highway|
+|Bruce Springsteen|Born in the U.S.A.|1984| 5|Downbound Train|
+|Bruce Springsteen|Born in the U.S.A.|1984| 6|I'm on Fire|
+|Bruce Springsteen|Born in the U.S.A.|1984| 7|No Surrender|
+|Bruce Springsteen|Born in the U.S.A.|1984| 8|Bobby Jean|
+|Bruce Springsteen|Born in the U.S.A.|1984| 9|I'm Goin' Down|
+|Bruce Springsteen|Born in the U.S.A.|1984|10|Glory Days|
+|Bruce Springsteen|Born in the U.S.A.|1984|11|Dancing in the Dark|
+|Bruce Springsteen|Born in the U.S.A.|1984|12|My Hometown|
+|The Rolling Stones|Let It Bleed|1969| 1|Gimme Shelter|
+|The Rolling Stones|Let It Bleed|1969| 2|Love in Vain|
+|The Rolling Stones|Let It Bleed|1969| 3|Country Honk|
+|The Rolling Stones|Let It Bleed|1969| 4|Live with Me|
+|The Rolling Stones|Let It Bleed|1969| 5|Let It Bleed|
+|The Rolling Stones|Let It Bleed|1969| 6|Midnight Rambler|
+|The Rolling Stones|Let It Bleed|1969| 7|You Got the Silver|
+|The Rolling Stones|Let It Bleed|1969| 8|Monkey Man|
+|The Rolling Stones|Let It Bleed|1969| 9|You Can't Always Get What You Want|
+|Stevie Ray Vaughan and Double Trouble|In Step|1989| 1|The House Is Rockin'|
+|Stevie Ray Vaughan and Double Trouble|In Step|1989| 2|Crossfire|
+|Stevie Ray Vaughan and Double Trouble|In Step|1989| 3|Tightrope|
+|Stevie Ray Vaughan and Double Trouble|In Step|1989| 4|Let Me Love You Baby|
+|Stevie Ray Vaughan and Double Trouble|In Step|1989| 5|Leave My Girl Alone|
+|Stevie Ray Vaughan and Double Trouble|In Step|1989| 6|Travis Walk|
+|Stevie Ray Vaughan and Double Trouble|In Step|1989| 7|Wall of Denial|
+|Stevie Ray Vaughan and Double Trouble|In Step|1989| 8|Scratch-N-Sniff|
+|Stevie Ray Vaughan and Double Trouble|In Step|1989| 9|Love Me Darlin'|
+|Stevie Ray Vaughan and Double Trouble|In Step|1989|10|Riviera Paradise|
+|Bob Marley and The Wailers|Catch a Fire|1973| 1|Concrete Jungle|
+|Bob Marley and The Wailers|Catch a Fire|1973| 2|Slave Driver|
+|Bob Marley and The Wailers|Catch a Fire|1973| 3|400 Years|
+|Bob Marley and The Wailers|Catch a Fire|1973| 4|Stop That Train|
+|Bob Marley and The Wailers|Catch a Fire|1973| 5|Baby We've Got a Date (Rock It Baby)|
+|Bob Marley and The Wailers|Catch a Fire|1973| 6|Stir It Up|
+|Bob Marley and The Wailers|Catch a Fire|1973| 7|Kinky Reggae|
+|Bob Marley and The Wailers|Catch a Fire|1973| 8|No More Trouble|
+|Bob Marley and The Wailers|Catch a Fire|1973| 9|Midnight Ravers|
+|Bruce Springsteen|High Hopes|2014| 1|High Hopes|
+|Bruce Springsteen|High Hopes|2014| 2|Harry's Place|
+|Bruce Springsteen|High Hopes|2014| 3|American Skin (41 Shots)|
+|Bruce Springsteen|High Hopes|2014| 4|Just Like Fire Would|
+|Bruce Springsteen|High Hopes|2014| 5|Down In The Hole|
+|Bruce Springsteen|High Hopes|2014| 6|Heaven's Wall|
+|Bruce Springsteen|High Hopes|2014| 7|Frankie Fell In Love|
+|Bruce Springsteen|High Hopes|2014| 8|This Is Your Sword|
+|Bruce Springsteen|High Hopes|2014| 9|Hunter Of Invisible Game|
+|Bruce Springsteen|High Hopes|2014|10|The Ghost Of Tom Joad|
+|Bruce Springsteen|High Hopes|2014|11|The Wall|
+|Bruce Springsteen|High Hopes|2014|12|Dream Baby Dream|
+|Ben Harper and Charlie Musselwhite|Get Up!|2013| 1|Don't Look Twice|
+|Ben Harper and Charlie Musselwhite|Get Up!|2013| 2|I'm In, I'm Out, I'm Gone|
+|Ben Harper and Charlie Musselwhite|Get Up!|2013| 3|We Can't End This Way|
+|Ben Harper and Charlie Musselwhite|Get Up!|2013| 4|I Don't Believe a Word You Say|
+|Ben Harper and Charlie Musselwhite|Get Up!|2013| 5|You Found Another Lover (I Lost Another Friend)|
+|Ben Harper and Charlie Musselwhite|Get Up!|2013| 6|I Ride at Dawn|
+|Ben Harper and Charlie Musselwhite|Get Up!|2013| 7|Blood Side Out|
+|Ben Harper and Charlie Musselwhite|Get Up!|2013| 8|Get Up!|
+|Ben Harper and Charlie Musselwhite|Get Up!|2013| 9|She Got Kick|
+|Ben Harper and Charlie Musselwhite|Get Up!|2013|10|All That Matters Now|
+|Led Zeppelin|Led Zeppelin IV|1971| 1|Black Dog|
+|Led Zeppelin|Led Zeppelin IV|1971| 2|Rock and Roll|
+|Led Zeppelin|Led Zeppelin IV|1971| 3|The Battle of Evermore|
+|Led Zeppelin|Led Zeppelin IV|1971| 4|Stairway to Heaven|
+|Led Zeppelin|Led Zeppelin IV|1971| 5|Misty Mountain Hop|
+|Led Zeppelin|Led Zeppelin IV|1971| 6|Four Sticks|
+|Led Zeppelin|Led Zeppelin IV|1971| 7|Going to California|
+|Led Zeppelin|Led Zeppelin IV|1971| 8|When the Levee Breaks|
