@@ -62,11 +62,11 @@ struct upo_bst_s
  * Memory deallocation (if requested) is performed by means of the `free()`
  * standard C function.
  */
-static void upo_bst_clear_impl(upo_bst_node_t*, int destroy_data);
+static void upo_bst_clear_impl(upo_bst_node_t *node, int destroy_data);
 
-static void *upo_bst_delete_impl(upo_bst_node_t *node, const void *key, int destroy_data);
+static void *upo_bst_delete_impl(upo_bst_node_t *node, const void *key, int destroy_data, upo_bst_comparator_t cmp);
 
-static void *upo_bst_delete_2c_impl(upo_bst_node_t *node, int destroy_data);
+static void *upo_bst_delete_2c_impl(upo_bst_node_t *node, int destroy_data, upo_bst_comparator_t cmp);
 
 static size_t upo_bst_height_impl(upo_bst_node_t *node);
 
@@ -78,9 +78,11 @@ static size_t upo_bst_size_impl(upo_bst_node_t *node);
 
 static void *upo_bst_max_impl(upo_bst_node_t *node);
 
-static void *upo_bst_get_impl(upo_bst_node_t *node, const void *key);
+static void *upo_bst_get_impl(upo_bst_node_t *node, const void *key, upo_bst_comparator_t cmp);
 
-static void *upo_bst_insert_impl(upo_bst_node_t *node, void *key, void *value);
+static void *upo_bst_insert_impl(upo_bst_node_t *node, void *key, void *value, upo_bst_comparator_t cmp);
+
+static void upo_bst_traverse_in_order_impl(upo_bst_node_t *node, upo_bst_visitor_t visit, void* visit_context);
 
 
 #endif /* UPO_BST_PRIVATE_H */
