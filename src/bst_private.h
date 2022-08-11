@@ -84,5 +84,14 @@ static void *upo_bst_insert_impl(upo_bst_node_t *node, void *key, void *value, u
 
 static void upo_bst_traverse_in_order_impl(upo_bst_node_t *node, upo_bst_visitor_t visit, void* visit_context);
 
+static int upo_bst_is_bst_impl(upo_bst_node_t *node, const void *min_key, const void *max_key, upo_bst_comparator_t cmp);
+
+static void upo_bst_keys_impl(const upo_bst_node_t *node, upo_bst_key_list_t *list);
+
+static void upo_bst_keys_range_impl(const upo_bst_node_t *node, upo_bst_key_list_t *list, upo_bst_comparator_t cmp, const void *low_key, const void *high_key);
+
+static void *upo_bst_floor_impl(upo_bst_node_t *node, upo_bst_comparator_t cmp, const void *key);
+
+static void *upo_bst_ceiling_impl(upo_bst_node_t *node, upo_bst_comparator_t cmp, const void *key);
 
 #endif /* UPO_BST_PRIVATE_H */
