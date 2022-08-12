@@ -22,8 +22,10 @@ ADT implemented in this project:
 Additional implementations:
 
 - Sorting algorithms
+- Extra exercises:
+  - Generic functions in [intro-exercises](./intro-exercises)
 
-## UPO alglib
+## UPO alglib core toolkit
 
 Collection of algorithms and abstract data types developed at the [Computer Science Institute](http://www.di.unipmn.it) of the [University of Piemonte Orientale](http://www.uniupo.it) for the *Algorithm 1 - Lab* course.
 
