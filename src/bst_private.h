@@ -78,6 +78,8 @@ static size_t upo_bst_size_impl(upo_bst_node_t *node);
 
 static void *upo_bst_max_impl(upo_bst_node_t *node);
 
+static void *upo_bst_min_impl(upo_bst_node_t *node);
+
 static void *upo_bst_get_impl(upo_bst_node_t *node, const void *key, upo_bst_comparator_t cmp);
 
 static void *upo_bst_insert_impl(upo_bst_node_t *node, void *key, void *value, upo_bst_comparator_t cmp);
