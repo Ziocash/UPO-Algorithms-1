@@ -11,11 +11,40 @@ static void test_mem_set();
 
 static void test_mem_cmp();
 
+static void test_all_of();
+
 static void upo_hex_fprint(FILE *stream, const void *p, size_t n);
 
 static void upo_mem_set(void *p, unsigned char c, size_t n);
 
 static int upo_mem_cmp(const void *p1, const void *p2, size_t n);
+
+static int upo_all_of(const void *base, size_t n, size_t sz, int (*pred)(const void *));
+
+int is_even(const void *v)
+{
+    assert(v);
+    return *((const int *)v) % 2 == 0;
+}
+
+int is_odd(const void *v)
+{
+    assert(v);
+    return *((const int *)v) % 2 == 1;
+}
+
+int is_palindrome(const void *v)
+{
+    assert(v);
+    const char **ps = (const char **)v;
+    size_t len = strlen(*ps);
+    for (size_t i = 0; i < len / 2; ++i)
+    {
+        if ((*ps)[i] != (*ps)[len - i - 1])
+            return 0;
+    }
+    return 1;
+}
 
 int main(void)
 {
@@ -33,6 +62,11 @@ int main(void)
     test_mem_cmp();
     fflush(stdout);
     printf("mem_cmp() working properly.\n");
+
+    fprintf(stdout, "Test all_of()...\n");
+    test_all_of();
+    fflush(stdout);
+    printf("all_of() working properly.\n");
 
     return 0;
 }
@@ -151,6 +185,29 @@ void test_mem_cmp()
     fprintf(stdout, "OK\n");
 }
 
+void test_all_of()
+{
+    int iary[] = {0, 2, 4, 6, 8};
+    fprintf(stdout, "Integer values array odd correct test...");
+    assert(upo_all_of(iary, sizeof(iary) / sizeof(int), sizeof(int), is_even) == 1);
+    fprintf(stdout, "OK\n");
+
+    int iary2[] = {0, 2, 5, 6, 8};
+    fprintf(stdout, "Integer values array odd failed test...");
+    assert(upo_all_of(iary2, sizeof(iary2) / sizeof(int), sizeof(int), is_even) == 0);
+    fprintf(stdout, "OK\n");
+
+    int iary3[] = {1, 3, 5, 7, 9};
+    fprintf(stdout, "Integer values array even test...");
+    assert(upo_all_of(iary3, sizeof(iary3) / sizeof(int), sizeof(int), is_odd) == 1);
+    fprintf(stdout, "OK\n");
+
+    char *sary[] = {"C", "H", "H", "C"};
+    fprintf(stdout, "String values array palindrome test...");
+    assert(upo_all_of(sary, sizeof(sary) / sizeof(sary[0]), sizeof(sary[0]), is_palindrome) == 1);
+    fprintf(stdout, "OK\n");
+}
+
 void upo_hex_fprint(FILE *stream, const void *p, size_t n)
 {
     const unsigned char *num = p;
@@ -186,6 +243,17 @@ int upo_mem_cmp(const void *p1, const void *p2, size_t n)
         value += *ptr1 - *ptr2;
         ptr1++;
         ptr2++;
+    }
+    return value;
+}
+
+int upo_all_of(const void *base, size_t n, size_t sz, int (*pred)(const void *))
+{
+    const unsigned char *ptr = base;
+    int value = 1;
+    for (size_t i = 0; i < n; i++)
+    {
+        value &= pred(ptr + i * sz);
     }
     return value;
 }

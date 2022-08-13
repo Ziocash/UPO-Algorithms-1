@@ -81,6 +81,35 @@ int upo_mem_cmp(const void *p1, const void *p2, size_t n);
 - `n`: size of memory area
 
 ```c
+char *p1 = "Ciao";
+char *p2 = "Ciao";
+
 memcmp(p1, p2, strlen(p1)) == upo_mem_cmp(p1, p2, strlen(p1)); // returns true
+
+int int1 = 0;
+int int2 = 1;
+
 memcmp(&int1, &int2, sizeof(int)) == upo_mem_cmp(&int1, &int2, sizeof(int)); // returns true
+```
+
+## All_of
+
+All_of allows to check if all elements in an array respect a predicate (e.g.: all numbers in an integer array are even).
+
+### All_of function prototype
+
+```c
+int upo_all_of(const void *base, size_t n, size_t sz, int (*pred)(const void *));
+```
+
+### How all_off works
+
+- `base`: pointer to array
+- `n`: number of items in the array
+- `sz`: element dimension
+- `pred`: pointer to predicate function
+
+```c
+int iary[] = {0, 2, 4, 6, 8};
+upo_all_of(iary2, sizeof(iary2) / sizeof(int), sizeof(int), is_even) == 0; //returns true
 ```
