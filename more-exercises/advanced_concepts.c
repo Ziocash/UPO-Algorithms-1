@@ -61,12 +61,12 @@ int main(void)
     fprintf(stdout, "Test mem_cmp()...\n");
     test_mem_cmp();
     fflush(stdout);
-    printf("mem_cmp() working properly.\n");
+    printf("mem_cmp() working properly.\n\n");
 
     fprintf(stdout, "Test all_of()...\n");
     test_all_of();
     fflush(stdout);
-    printf("all_of() working properly.\n");
+    printf("all_of() working properly.\n\n");
 
     return 0;
 }
