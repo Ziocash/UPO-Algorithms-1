@@ -139,10 +139,16 @@ void test_mem_cmp()
     int int1 = 0;
     int int2 = 1;
 
-    fprintf(stdout, "Integer value test...");
+    fprintf(stdout, "Integer value test 1...");
     assert(memcmp(&int1, &int2, sizeof(int)) == upo_mem_cmp(&int1, &int2, sizeof(int)));
     fprintf(stdout, "OK\n");
-    
+
+    int int3 = 16777215;
+    int int4 = 65535;
+
+    fprintf(stdout, "Integer value test 2...");
+    assert(memcmp(&int3, &int4, sizeof(int)) == upo_mem_cmp(&int3, &int4, sizeof(int)));
+    fprintf(stdout, "OK\n");
 }
 
 void upo_hex_fprint(FILE *stream, const void *p, size_t n)
@@ -175,9 +181,9 @@ int upo_mem_cmp(const void *p1, const void *p2, size_t n)
     const unsigned char *ptr2 = p2;
     int value = 0;
 
-    for(size_t i = 0; i < n; i++)
+    for (size_t i = 0; i < n; i++)
     {
-        value += (*ptr1 > *ptr2) - (*ptr2 > *ptr1);
+        value += *ptr1 - *ptr2;
         ptr1++;
         ptr2++;
     }
