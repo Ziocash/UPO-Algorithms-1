@@ -13,9 +13,9 @@ static void test_mem_cmp();
 
 static void upo_hex_fprint(FILE *stream, const void *p, size_t n);
 
-static int upo_mem_cmp(const void *p1, const void *p2, size_t n);
-
 static void upo_mem_set(void *p, unsigned char c, size_t n);
+
+static int upo_mem_cmp(const void *p1, const void *p2, size_t n);
 
 int main(void)
 {
