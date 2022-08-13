@@ -1,0 +1,23 @@
+{
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "compile lupoalglib_s.a",
+            "command": "/usr/bin/ar",
+            "args": [
+                "rcs",
+                "libupoalglib_s.a",
+                "${cwd}/src/bst.o",
+                "${cwd}/src/hires_timer.o",
+                "${cwd}/src/io.o",
+                "${cwd}/src/random.o",
+                "${cwd}/src/sort.o",
+                "${cwd}/src/stack.o",
+                "${cwd}/src/timer.o",
+                "${cwd}/src/utility.o"
+            ],
+            "problemMatcher": []
+        }
+    ],
+    "version": "2.0.0"
+}

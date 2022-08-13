@@ -1,0 +1,114 @@
+{
+    "makefile.launchConfigurations": [
+        {
+            "cwd": "/home/ziocash/UPO-Algorithms-1/apps",
+            "binaryPath": "/home/ziocash/UPO-Algorithms-1/apps/sort_playlist",
+            "binaryArgs": [
+                "-i",
+                "/home/ziocash/UPO-Algorithms-1/data/playlist.txt",
+                "-s",
+                "artist"
+            ]
+        },
+        {
+            "cwd": "/home/ziocash/UPO-Algorithms-1/apps",
+            "binaryPath": "/home/ziocash/UPO-Algorithms-1/apps/sort_playlist",
+            "binaryArgs": [
+                "-i",
+                "/home/ziocash/UPO-Algorithms-1/data/playlist.txt",
+                "-s",
+                "album"
+            ]
+        },
+        {
+            "cwd": "/home/ziocash/UPO-Algorithms-1/apps",
+            "binaryPath": "/home/ziocash/UPO-Algorithms-1/apps/sort_playlist",
+            "binaryArgs": [
+                "-i",
+                "/home/ziocash/UPO-Algorithms-1/data/playlist.txt",
+                "-s",
+                "title"
+            ]
+        },
+        {
+            "cwd": "/home/ziocash/UPO-Algorithms-1/apps",
+            "binaryPath": "/home/ziocash/UPO-Algorithms-1/apps/sort_playlist",
+            "binaryArgs": [
+                "-i",
+                "/home/ziocash/UPO-Algorithms-1/data/playlist.txt",
+                "-s",
+                "trackno"
+            ]
+        },
+        {
+            "cwd": "/home/ziocash/UPO-Algorithms-1/apps",
+            "binaryPath": "/home/ziocash/UPO-Algorithms-1/apps/sort_playlist",
+            "binaryArgs": [
+                "-i",
+                "/home/ziocash/UPO-Algorithms-1/data/playlist.txt",
+                "-s",
+                "year"
+            ]
+        },
+        {
+            "cwd": "/home/ziocash/UPO-Algorithms-1/test",
+            "binaryPath": "/home/ziocash/UPO-Algorithms-1/test/test_stack",
+            "binaryArgs": []
+        },
+        {
+            "cwd": "/home/ziocash/UPO-Algorithms-1/apps",
+            "binaryPath": "/home/ziocash/UPO-Algorithms-1/apps/sort_playlist_multi",
+            "binaryArgs": [
+                "-i",
+                "/home/ziocash/UPO-Algorithms-1/data/playlist_multi.txt",
+                "-s",
+                "year",
+                "-s",
+                "artist",
+                "-s",
+                "album"
+            ]
+        },
+        {
+            "cwd": "/home/ziocash/UPO-Algorithms-1/apps",
+            "binaryPath": "/home/ziocash/UPO-Algorithms-1/apps/sort_playlist_multi",
+            "binaryArgs": [
+                "-i",
+                "/home/ziocash/UPO-Algorithms-1/data/playlist_multi.txt",
+                "-s",
+                "artist",
+                "-s",
+                "year",
+                "-s",
+                "album"
+            ]
+        },
+        {
+            "cwd": "/home/ziocash/UPO-Algorithms-1/apps",
+            "binaryPath": "/home/ziocash/UPO-Algorithms-1/apps/sort_playlist_multi",
+            "binaryArgs": [
+                "-i",
+                "/home/ziocash/UPO-Algorithms-1/data/playlist_multi.txt",
+                "-s",
+                "artist",
+                "-s",
+                "album",
+                "-s",
+                "year"
+            ]
+        },
+        {
+            "cwd": "/home/ziocash/UPO-Algorithms-1/test",
+            "binaryPath": "/home/ziocash/UPO-Algorithms-1/test/test_bst",
+            "binaryArgs": []
+        },
+        {
+            "cwd": "/home/ziocash/UPO-Algorithms-1/test",
+            "binaryPath": "/home/ziocash/UPO-Algorithms-1/test/test_bst_more",
+            "binaryArgs": []
+        }
+    ],
+    "files.associations": {
+        "stdlib.h": "c"
+    }
+}

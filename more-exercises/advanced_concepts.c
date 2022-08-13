@@ -9,7 +9,11 @@ static void test_hex_fprint();
 
 static void test_mem_set();
 
+static void test_mem_cmp();
+
 static void upo_hex_fprint(FILE *stream, const void *p, size_t n);
+
+static int upo_mem_cmp(const void *p1, const void *p2, size_t n);
 
 static void upo_mem_set(void *p, unsigned char c, size_t n);
 
@@ -18,12 +22,17 @@ int main(void)
     fprintf(stdout, "Test hex_fprint()...\n");
     test_hex_fprint();
     fflush(stdout);
-    printf("hex_fprint() working properly.\n");
+    printf("hex_fprint() working properly.\n\n");
 
     fprintf(stdout, "Test mem_set()...\n");
     test_mem_set();
     fflush(stdout);
-    printf("mem_set() working properly.\n");
+    printf("mem_set() working properly.\n\n");
+
+    fprintf(stdout, "Test mem_cmp()...\n");
+    test_mem_cmp();
+    fflush(stdout);
+    printf("mem_cmp() working properly.\n");
 
     return 0;
 }
@@ -118,6 +127,24 @@ void test_mem_set()
     fprintf(stdout, "OK\n");
 }
 
+void test_mem_cmp()
+{
+    char *p1 = "Ciao";
+    char *p2 = "Ciao";
+
+    fprintf(stdout, "String test...");
+    assert(memcmp(p1, p2, strlen(p1)) == upo_mem_cmp(p1, p2, strlen(p1)));
+    fprintf(stdout, "OK\n");
+
+    int int1 = 0;
+    int int2 = 1;
+
+    fprintf(stdout, "Integer value test...");
+    assert(memcmp(&int1, &int2, sizeof(int)) == upo_mem_cmp(&int1, &int2, sizeof(int)));
+    fprintf(stdout, "OK\n");
+    
+}
+
 void upo_hex_fprint(FILE *stream, const void *p, size_t n)
 {
     const unsigned char *num = p;
@@ -140,4 +167,19 @@ void upo_mem_set(void *p, unsigned char c, size_t n)
         *ptr = c;
         ptr++;
     }
+}
+
+int upo_mem_cmp(const void *p1, const void *p2, size_t n)
+{
+    const unsigned char *ptr1 = p1;
+    const unsigned char *ptr2 = p2;
+    int value = 0;
+
+    for(size_t i = 0; i < n; i++)
+    {
+        value += (*ptr1 > *ptr2) - (*ptr2 > *ptr1);
+        ptr1++;
+        ptr2++;
+    }
+    return value;
 }
