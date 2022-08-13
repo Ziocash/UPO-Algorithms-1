@@ -110,6 +110,6 @@ int upo_all_of(const void *base, size_t n, size_t sz, int (*pred)(const void *))
 - `pred`: pointer to predicate function
 
 ```c
-int iary[] = {0, 2, 4, 6, 8};
+int iary2[] = {0, 2, 4, 6, 8};
 upo_all_of(iary2, sizeof(iary2) / sizeof(int), sizeof(int), is_even) == 0; //returns true
 ```
