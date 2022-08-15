@@ -91,6 +91,7 @@ void upo_merge_sort(void *base, size_t n, size_t size, upo_sort_comparator_t cmp
  */
 void upo_quick_sort(void *base, size_t n, size_t size, upo_sort_comparator_t cmp);
 
+void upo_bubble_sort(void *base, size_t n, size_t size, upo_sort_comparator_t cmp);
 
 void upo_quick_sort_median3_cutoff(void *base, size_t n, size_t size, upo_sort_comparator_t cmp);
 

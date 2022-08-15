@@ -55,6 +55,7 @@ void test_sort_algorithm(void (*sort)(void *, size_t, size_t, upo_sort_comparato
 static void test_insertion_sort();
 static void test_merge_sort();
 static void test_quick_sort();
+static void test_bubble_sort();
 static void test_quick_sort_median3_cutoff();
 
 int double_comparator(const void *a, const void *b)
@@ -141,6 +142,11 @@ void test_quick_sort()
     test_sort_algorithm(upo_quick_sort);
 }
 
+void test_bubble_sort()
+{
+    test_sort_algorithm(upo_bubble_sort);
+}
+
 void test_quick_sort_median3_cutoff()
 {
     int ok = 1;
@@ -170,6 +176,11 @@ int main()
     printf("Test case 'quick sort'... ");
     fflush(stdout);
     test_quick_sort();
+    printf("OK\n");
+
+    printf("Test case 'bubble sort'... ");
+    fflush(stdout);
+    test_bubble_sort();
     printf("OK\n");
 
     printf("Test case 'quick sort median 3 with cutoff'... ");

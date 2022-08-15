@@ -152,6 +152,19 @@ size_t upo_quick_sort_partition(void *base, size_t lo, size_t hi, size_t size, u
     return j;
 }
 
+void upo_bubble_sort(void *base, size_t n, size_t size, upo_sort_comparator_t cmp)
+{
+    unsigned char *ptr = base;
+    for (size_t i = 0; i < n; i++)
+    {
+        for (size_t j = 0; j < ((n - 1) - i); j++)
+        {
+            if (cmp(ptr + j * size, ptr + ((j + 1) * size)) > 0)
+                upo_swap(ptr + ((j + 1) * size), ptr + j * size, size);
+        }
+    }
+}
+
 void upo_quick_sort_median3_cutoff(void *base, size_t n, size_t size, upo_sort_comparator_t cmp)
 {
     upo_quick_sort_median3_cutoff_rec(base, 0, n - 1, size, cmp);
