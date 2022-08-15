@@ -467,6 +467,22 @@ int upo_bst_is_bst_impl(upo_bst_node_t *node, const void *min_key, const void *m
     return 0;
 }
 
+size_t upo_bst_rank(const upo_bst_t tree, const void *key)
+{
+    return upo_bst_rank_impl(tree->root, key, tree->key_cmp);
+}
+
+size_t upo_bst_rank_impl(upo_bst_node_t *node, const void *key, upo_bst_comparator_t cmp)
+{
+    if (node == NULL)
+        return 0;
+
+    if (cmp(node->key, key) < 0)
+        return 1 + upo_bst_rank_impl(node->left, key, cmp) + upo_bst_rank_impl(node->right, key, cmp);
+
+    return upo_bst_rank_impl(node->left, key, cmp);
+}
+
 /**** EXERCISE #2 - END of EXTRA OPERATIONS ****/
 
 upo_bst_comparator_t upo_bst_get_comparator(const upo_bst_t tree)
