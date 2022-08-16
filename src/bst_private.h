@@ -98,4 +98,6 @@ static void *upo_bst_ceiling_impl(upo_bst_node_t *node, upo_bst_comparator_t cmp
 
 static size_t upo_bst_rank_impl(upo_bst_node_t *node, const void *key, upo_bst_comparator_t cmp);
 
+static void *upo_bst_predecessor_impl(upo_bst_node_t *node, const void *key, upo_bst_comparator_t cmp);
+
 #endif /* UPO_BST_PRIVATE_H */

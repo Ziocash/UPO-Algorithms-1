@@ -483,6 +483,31 @@ size_t upo_bst_rank_impl(upo_bst_node_t *node, const void *key, upo_bst_comparat
     return upo_bst_rank_impl(node->left, key, cmp);
 }
 
+void *upo_bst_predecessor(const upo_bst_t tree, const void *key)
+{
+    if (tree == NULL)
+        return NULL;
+    return upo_bst_predecessor_impl(tree->root, key, tree->key_cmp);
+}
+
+void *upo_bst_predecessor_impl(upo_bst_node_t *node, const void *key, upo_bst_comparator_t cmp)
+{
+    if (node == NULL)
+        return NULL;
+    if (cmp(node->key, key) == 0)
+        return upo_bst_max_impl(node->left);
+
+    else if (cmp(node->key, key) > 0)
+        return upo_bst_predecessor_impl(node->left, key, cmp);
+    else
+    {
+        void *previuos = node->key;
+        void *result = upo_bst_predecessor_impl(node->right, key, cmp);
+        return result != NULL ? result : previuos;
+    }
+    return node->key;
+}
+
 /**** EXERCISE #2 - END of EXTRA OPERATIONS ****/
 
 upo_bst_comparator_t upo_bst_get_comparator(const upo_bst_t tree)

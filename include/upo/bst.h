@@ -387,4 +387,6 @@ int upo_bst_is_bst(const upo_bst_t tree, const void *min_key, const void *max_ke
 
 size_t upo_bst_rank(const upo_bst_t tree, const void *key);
 
+void* upo_bst_predecessor(const upo_bst_t tree, const void *key);
+
 #endif /* UPO_BST_H */

@@ -871,6 +871,43 @@ void test_rank()
     upo_bst_destroy(bst, 0);
 }
 
+void test_predecessor()
+{
+    int keys[] = {8, 3, 10, 1, 6, 14, 4, 7, 13};
+    int values[] = {0, 1, 2, 3, 4, 5, 6, 7, 8};
+
+    int test_keys[] = {8, 1, 13, 12, 0, 100};
+    int expected_values[] = {7, 0, 10, 10, 0, 14};
+
+    upo_bst_t bst = upo_bst_create(int_compare);
+
+    assert(bst != NULL);
+
+    // BST with no nodes
+
+    void *value = upo_bst_predecessor(bst, &test_keys[0]);
+
+    assert(value == NULL);
+
+    // Filling BST
+
+    size_t n = sizeof(keys) / sizeof(int);
+    for (size_t i = 0; i < n; i++)
+        upo_bst_insert(bst, &keys[i], &values[i]);
+
+    size_t test_n = sizeof(test_keys) / sizeof(int);
+    for (size_t i = 0; i < test_n; i++)
+    {
+        int *key = (int *)upo_bst_predecessor(bst, &test_keys[i]);
+        if (i == 1 || i == 4)
+            assert(key == NULL);
+        else
+            assert(*key == expected_values[i]);
+    }
+
+    upo_bst_destroy(bst, 0);
+}
+
 int main()
 {
     printf("Test case 'min/max'... ");
@@ -901,6 +938,11 @@ int main()
     printf("Test case 'rank'... ");
     fflush(stdout);
     test_rank();
+    printf("OK\n");
+
+    printf("Test case 'predecessor'... ");
+    fflush(stdout);
+    test_predecessor();
     printf("OK\n");
 
     return 0;
