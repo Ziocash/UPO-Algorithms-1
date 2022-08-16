@@ -908,6 +908,52 @@ void test_predecessor()
     upo_bst_destroy(bst, 0);
 }
 
+void test_depth()
+{
+    int keys[] = {8, 3, 10, 1, 6, 14, 4, 7, 13};
+    int values[] = {0, 1, 2, 3, 4, 5, 6, 7, 8};
+
+    int test_keys[] = {8, 1, 13, 12, 0, 100};
+    int expected_depths[] = {0, 2, 3, -1, -1, -1};
+    int expected_keys[] = {8, 1, 13};
+
+    upo_bst_t bst = upo_bst_create(int_compare);
+
+    assert(bst != NULL);
+
+    // BST with no nodes
+    long test_depth = 0;
+
+    void *value = upo_bst_get_value_depth(bst, &test_keys[0], &test_depth);
+
+    assert(value == NULL);
+    assert(test_depth == -1);
+
+    // Filling BST
+
+    size_t n = sizeof(keys) / sizeof(int);
+    for (size_t i = 0; i < n; i++)
+        upo_bst_insert(bst, &keys[i], &values[i]);
+
+    size_t test_n = sizeof(test_keys) / sizeof(int);
+    for (size_t i = 0; i < test_n; i++)
+    {
+        int *key = (int *)upo_bst_get_value_depth(bst, &test_keys[i], &test_depth);
+        if (i < 3)
+        {
+            assert(*key == expected_keys[i]);
+            assert(test_depth == expected_depths[i]);
+        }
+        else
+        {
+            assert(key == NULL);
+            assert(test_depth == expected_depths[i]);
+        }
+    }
+
+    upo_bst_destroy(bst, 0);
+}
+
 int main()
 {
     printf("Test case 'min/max'... ");
@@ -943,6 +989,11 @@ int main()
     printf("Test case 'predecessor'... ");
     fflush(stdout);
     test_predecessor();
+    printf("OK\n");
+
+    printf("Test case 'predecessor'... ");
+    fflush(stdout);
+    test_depth();
     printf("OK\n");
 
     return 0;

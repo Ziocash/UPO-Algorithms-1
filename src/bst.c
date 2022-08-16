@@ -508,6 +508,40 @@ void *upo_bst_predecessor_impl(upo_bst_node_t *node, const void *key, upo_bst_co
     return node->key;
 }
 
+void *upo_bst_get_value_depth(const upo_bst_t tree, const void *key, long *depth)
+{
+    if (tree == NULL)
+    {
+        *depth = -1;
+        return NULL;
+    }
+
+    *depth = 0;
+    return upo_bst_get_value_depth_impl(tree->root, key, depth, tree->key_cmp);
+}
+
+void *upo_bst_get_value_depth_impl(upo_bst_node_t *node, const void *key, long *depth, upo_bst_comparator_t cmp)
+{
+    if (node == NULL)
+    {
+        (*depth) = -1;
+        return NULL;
+    }
+
+    if (cmp(node->key, key) > 0)
+    {
+        (*depth)++;
+        return upo_bst_get_value_depth_impl(node->left, key, depth, cmp);
+    }
+    else if (cmp(node->key, key) < 0)
+    {
+        (*depth)++;
+        return upo_bst_get_value_depth_impl(node->right, key, depth, cmp);
+    }
+    else
+        return node->key;
+}
+
 /**** EXERCISE #2 - END of EXTRA OPERATIONS ****/
 
 upo_bst_comparator_t upo_bst_get_comparator(const upo_bst_t tree)

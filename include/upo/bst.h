@@ -389,4 +389,6 @@ size_t upo_bst_rank(const upo_bst_t tree, const void *key);
 
 void* upo_bst_predecessor(const upo_bst_t tree, const void *key);
 
+void* upo_bst_get_value_depth(const upo_bst_t tree, const void *key, long *depth);
+
 #endif /* UPO_BST_H */
