@@ -102,4 +102,6 @@ static void *upo_bst_predecessor_impl(upo_bst_node_t *node, const void *key, upo
 
 static void *upo_bst_get_value_depth_impl(upo_bst_node_t* node, const void *key, long *depth, upo_bst_comparator_t cmp);
 
+static void upo_bst_keys_le_impl(upo_bst_node_t *node, const void *key, upo_bst_key_list_t *list, upo_bst_comparator_t cmp);
+
 #endif /* UPO_BST_PRIVATE_H */

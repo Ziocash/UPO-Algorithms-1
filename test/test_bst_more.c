@@ -842,7 +842,7 @@ void test_bst_property()
 
 void test_rank()
 {
-    int keys[] = {8, 3, 10, 1, 6, 14, 4, 7, 13};
+    int keys[] = {8, 3, 1, 6, 4, 7, 10, 14, 13};
     int values[] = {0, 1, 2, 3, 4, 5, 6, 7, 8};
 
     int test_keys[] = {8, 1, 13, 14, 0, 5, 12, 100};
@@ -873,7 +873,7 @@ void test_rank()
 
 void test_predecessor()
 {
-    int keys[] = {8, 3, 10, 1, 6, 14, 4, 7, 13};
+    int keys[] = {8, 3, 1, 6, 4, 7, 10, 14, 13};
     int values[] = {0, 1, 2, 3, 4, 5, 6, 7, 8};
 
     int test_keys[] = {8, 1, 13, 12, 0, 100};
@@ -910,7 +910,7 @@ void test_predecessor()
 
 void test_depth()
 {
-    int keys[] = {8, 3, 10, 1, 6, 14, 4, 7, 13};
+    int keys[] = {8, 3, 1, 6, 4, 7, 10, 14, 13};
     int values[] = {0, 1, 2, 3, 4, 5, 6, 7, 8};
 
     int test_keys[] = {8, 1, 13, 12, 0, 100};
@@ -954,6 +954,53 @@ void test_depth()
     upo_bst_destroy(bst, 0);
 }
 
+void test_keys_le()
+{
+    int keys[] = {8, 3, 1, 6, 4, 7, 10, 14, 13};
+    int values[] = {0, 1, 2, 3, 4, 5, 6, 7, 8};
+
+    int test_keys[] = {8, 1, 14, 0, 5, 100};
+
+    upo_bst_t bst = upo_bst_create(int_compare);
+    upo_bst_key_list_t key_list = NULL;
+    size_t n = sizeof(keys) / sizeof(int);
+
+    assert(bst != NULL);
+
+    /* BST: empty tree */
+    key_list = upo_bst_keys_le(bst, &keys[0]);
+    assert(key_list == NULL);
+
+    for (size_t i = 0; i < n; i++)
+    {
+        upo_bst_insert(bst, &keys[i], &values[i]);
+    }
+
+    size_t test_n = sizeof(test_keys) / sizeof(int);
+    for (size_t i = 0; i < test_n; i++)
+    {
+        // Check the returned list
+        key_list = upo_bst_keys_le(bst, &test_keys[i]);
+        if (i == 3)
+            assert(key_list == NULL);
+        else
+            assert(check_key_list(key_list, keys, n, INT_MIN, test_keys[i]));
+
+        // Free the list
+        while (key_list != NULL)
+        {
+            upo_bst_key_list_t old_list = key_list;
+            key_list = key_list->next;
+            free(old_list);
+        }
+        key_list = NULL;
+    }
+
+    upo_bst_clear(bst, 0);
+
+    upo_bst_destroy(bst, 0);
+}
+
 int main()
 {
     printf("Test case 'min/max'... ");
@@ -991,9 +1038,14 @@ int main()
     test_predecessor();
     printf("OK\n");
 
-    printf("Test case 'predecessor'... ");
+    printf("Test case 'depth'... ");
     fflush(stdout);
     test_depth();
+    printf("OK\n");
+
+    printf("Test case 'keys less or equal than'... ");
+    fflush(stdout);
+    test_keys_le();
     printf("OK\n");
 
     return 0;
