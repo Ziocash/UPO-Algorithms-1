@@ -569,18 +569,49 @@ void upo_ht_linprob_resize(upo_ht_linprob_t ht, size_t n)
 
 upo_ht_key_list_t upo_ht_sepchain_keys(const upo_ht_sepchain_t ht)
 {
-    /* TO STUDENTS:
-     *  Remove the following two lines and put here your implementation. */
-    fprintf(stderr, "To be implemented!\n");
-    abort();
+    if (ht == NULL)
+        return NULL;
+    upo_ht_key_list_t list = NULL;
+    for (size_t i = 0; i < ht->capacity; i++)
+    {
+        upo_ht_sepchain_list_node_t *node = ht->slots[i].head;
+        while (node != NULL)
+        {
+            if (node->key != NULL)
+                upo_ht_build_key_list(node->key, &list);
+            node = node->next;
+        }
+    }
+    return list;
+}
+
+void upo_ht_build_key_list(const void *key, upo_ht_key_list_t *list)
+{
+    upo_ht_key_list_node_t *list_node = malloc(sizeof(upo_ht_key_list_node_t));
+    list_node->next = NULL;
+    upo_ht_key_list_node_t *ptr_node = (*list);
+    list_node->key = key;
+    if (*list == NULL)
+        *list = list_node;
+    else
+    {
+        while (ptr_node->next != NULL)
+            ptr_node = ptr_node->next;
+        ptr_node->next = list_node;
+    }
 }
 
 void upo_ht_sepchain_traverse(const upo_ht_sepchain_t ht, upo_ht_visitor_t visit, void *visit_context)
 {
-    /* TO STUDENTS:
-     *  Remove the following two lines and put here your implementation. */
-    fprintf(stderr, "To be implemented!\n");
-    abort();
+    for(size_t i = 0; i < ht->capacity; i++)
+    {
+        upo_ht_sepchain_list_node_t* node = ht->slots[i].head;
+        while(node != NULL)
+        {
+            visit(node->key, node->value, visit_context);
+            node = node->next;
+        }
+    }
 }
 
 upo_ht_key_list_t upo_ht_linprob_keys(const upo_ht_linprob_t ht)
