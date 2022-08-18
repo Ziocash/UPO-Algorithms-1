@@ -103,6 +103,6 @@ static void upo_ht_linprob_resize(upo_ht_linprob_t ht, size_t n);
 
 /*** END of HASH TABLE with LINEAR PROBING ***/
 
-void upo_ht_build_key_list(const void *key, upo_ht_key_list_t *list);
+void upo_ht_build_key_list(void *key, upo_ht_key_list_t *list);
 
 #endif /* UPO_HASHTABLE_PRIVATE_H */

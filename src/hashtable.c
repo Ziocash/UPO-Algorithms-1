@@ -585,7 +585,7 @@ upo_ht_key_list_t upo_ht_sepchain_keys(const upo_ht_sepchain_t ht)
     return list;
 }
 
-void upo_ht_build_key_list(const void *key, upo_ht_key_list_t *list)
+void upo_ht_build_key_list(void *key, upo_ht_key_list_t *list)
 {
     upo_ht_key_list_node_t *list_node = malloc(sizeof(upo_ht_key_list_node_t));
     list_node->next = NULL;
