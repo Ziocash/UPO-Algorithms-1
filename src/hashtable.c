@@ -603,10 +603,10 @@ void upo_ht_build_key_list(void *key, upo_ht_key_list_t *list)
 
 void upo_ht_sepchain_traverse(const upo_ht_sepchain_t ht, upo_ht_visitor_t visit, void *visit_context)
 {
-    for(size_t i = 0; i < ht->capacity; i++)
+    for (size_t i = 0; i < ht->capacity; i++)
     {
-        upo_ht_sepchain_list_node_t* node = ht->slots[i].head;
-        while(node != NULL)
+        upo_ht_sepchain_list_node_t *node = ht->slots[i].head;
+        while (node != NULL)
         {
             visit(node->key, node->value, visit_context);
             node = node->next;
@@ -616,18 +616,24 @@ void upo_ht_sepchain_traverse(const upo_ht_sepchain_t ht, upo_ht_visitor_t visit
 
 upo_ht_key_list_t upo_ht_linprob_keys(const upo_ht_linprob_t ht)
 {
-    /* TO STUDENTS:
-     *  Remove the following two lines and put here your implementation. */
-    fprintf(stderr, "To be implemented!\n");
-    abort();
+    if (ht == NULL)
+        return NULL;
+    upo_ht_key_list_t list = NULL;
+    for (size_t i = 0; i < ht->capacity; i++)
+    {
+        if (ht->slots[i].key != NULL)
+            upo_ht_build_key_list(ht->slots[i].key, &list);
+    }
+    return list;
 }
 
 void upo_ht_linprob_traverse(const upo_ht_linprob_t ht, upo_ht_visitor_t visit, void *visit_context)
 {
-    /* TO STUDENTS:
-     *  Remove the following two lines and put here your implementation. */
-    fprintf(stderr, "To be implemented!\n");
-    abort();
+    for (size_t i = 0; i < ht->capacity; i++)
+    {
+        if (ht->slots[i].key != NULL)
+            visit(ht->slots[i].key, ht->slots[i].value, visit_context);
+    }
 }
 
 /*** EXERCISE #3 - END of HASH TABLE - EXTRA OPERATIONS ***/
