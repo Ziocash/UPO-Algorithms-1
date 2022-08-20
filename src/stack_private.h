@@ -1,7 +1,7 @@
 /* vim: set tabstop=4 expandtab shiftwidth=4 softtabstop=4: */
 
 /**
- * \file stack_private.h
+ * \file src/stack_private.h
  *
  * \brief Private header for the Stack abstract data type.
  *

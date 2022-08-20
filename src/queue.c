@@ -1,7 +1,7 @@
 /* vim: set tabstop=4 expandtab shiftwidth=4 softtabstop=4: */
 
 /**
- * \file queue.c
+ * \file src/queue.c
  *
  * \brief Implementation file for the Queue type.
  *

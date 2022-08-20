@@ -1,7 +1,7 @@
 /* vim: set tabstop=4 expandtab shiftwidth=4 softtabstop=4: */
 
 /**
- * \file hires_timer_private.h
+ * \file src/hires_timer_private.h
  *
  * \brief Private header for the High-resolution Timer abstract data type.
  *

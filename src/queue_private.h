@@ -1,7 +1,7 @@
 /* vim: set tabstop=4 expandtab shiftwidth=4 softtabstop=4: */
 
 /**
- * \file queue_private.h
+ * \file src/queue_private.h
  *
  * \brief Private header for the Queue type.
  *

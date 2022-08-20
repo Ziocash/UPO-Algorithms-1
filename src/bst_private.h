@@ -1,7 +1,7 @@
 /* vim: set tabstop=4 expandtab shiftwidth=4 softtabstop=4: */
 
 /**
- * \file bst_private.h
+ * \file src/bst_private.h
  *
  * \brief Private header for the Binary Search Tree abstract data type.
  *
