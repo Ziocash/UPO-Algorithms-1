@@ -128,8 +128,9 @@ void *upo_ht_sepchain_put(upo_ht_sepchain_t ht, void *key, void *value)
     upo_ht_hasher_t hasher = ht->key_hash;
     size_t hash = hasher(key, ht->capacity);
     upo_ht_sepchain_list_node_t *node = ht->slots[hash].head;
+    upo_ht_comparator_t cmp = ht->key_cmp;
 
-    while (node != NULL && key != node->key)
+    while (node != NULL && cmp(key, node->key) != 0)
         node = node->next;
     if (node == NULL)
     {
@@ -156,8 +157,9 @@ void upo_ht_sepchain_insert(upo_ht_sepchain_t ht, void *key, void *value)
     upo_ht_hasher_t hasher = ht->key_hash;
     size_t hash = hasher(key, ht->capacity);
     upo_ht_sepchain_list_node_t *node = ht->slots[hash].head;
+    upo_ht_comparator_t cmp = ht->key_cmp;
 
-    while (node != NULL && key != node->key)
+    while (node != NULL && cmp(key, node->key) != 0)
         node = node->next;
     if (node == NULL)
     {
@@ -177,8 +179,9 @@ void *upo_ht_sepchain_get(const upo_ht_sepchain_t ht, const void *key)
     upo_ht_hasher_t hasher = ht->key_hash;
     size_t hash = hasher(key, ht->capacity);
     upo_ht_sepchain_list_node_t *node = ht->slots[hash].head;
+    upo_ht_comparator_t cmp = ht->key_cmp;
 
-    while (node != NULL && key != node->key)
+    while (node != NULL && cmp(key, node->key) != 0)
         node = node->next;
     if (node != NULL)
         return node->value;
@@ -194,8 +197,9 @@ int upo_ht_sepchain_contains(const upo_ht_sepchain_t ht, const void *key)
     upo_ht_hasher_t hasher = ht->key_hash;
     size_t hash = hasher(key, ht->capacity);
     upo_ht_sepchain_list_node_t *node = ht->slots[hash].head;
+    upo_ht_comparator_t cmp = ht->key_cmp;
 
-    while (node != NULL && key != node->key)
+    while (node != NULL && cmp(key, node->key) != 0)
         node = node->next;
     if (node != NULL)
         return 1;
@@ -212,8 +216,9 @@ void upo_ht_sepchain_delete(upo_ht_sepchain_t ht, const void *key, int destroy_d
     size_t hash = hasher(key, ht->capacity);
     upo_ht_sepchain_list_node_t *node = ht->slots[hash].head;
     upo_ht_sepchain_list_node_t *ptr = NULL;
+    upo_ht_comparator_t cmp = ht->key_cmp;
 
-    while (node != NULL && key != node->key)
+    while (node != NULL && cmp(key, node->key) != 0)
     {
         ptr = node;
         node = node->next;
