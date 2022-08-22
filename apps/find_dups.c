@@ -31,38 +31,149 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include <upo/hashtable.h>
+
+int str_cmp(const void *a, const void *b)
+{
+    const char *aa = *(char **)a;
+    const char *bb = *(char **)b;
+
+    return strcmp(aa, bb);
+}
 
 upo_strings_list_t upo_find_dups(const char **strs, size_t n)
 {
-    if(strs == NULL)
+    if (strs == NULL)
         return NULL;
     upo_strings_list_t list = NULL;
-    //upo_ht_sepchain_t table = upo_ht_sepchain_create(UPO_HT_SEPCHAIN_DEFAULT_CAPACITY, upo_ht_hash_str_kr2e, );
+    upo_ht_sepchain_t table = upo_ht_sepchain_create(UPO_HT_SEPCHAIN_DEFAULT_CAPACITY, upo_ht_hash_str_kr2e, str_cmp);
+    for (size_t i = 0; i < n; i++)
+    {
+        char *dup = NULL;
+        if ((dup = upo_ht_sepchain_put(table, &strs[i], &strs[i])) != NULL)
+            upo_dups_create_list(&list, dup);
+    }
+    upo_ht_sepchain_destroy(table, 0);
     return list;
 }
 
 upo_strings_list_t upo_find_idups(const char **strs, size_t n, int ignore_case)
 {
+    if (strs == NULL)
+        return NULL;
     upo_strings_list_t list = NULL;
+    upo_ht_sepchain_t table = upo_ht_sepchain_create(UPO_HT_SEPCHAIN_DEFAULT_CAPACITY, upo_ht_hash_str_kr2e, str_cmp);
+    size_t size = n * sizeof(char *);
+    char **strs_copy = malloc(size);
+    memset(strs_copy, '\0', size);
+    for (size_t i = 0; i < n; i++)
+    {
+        if (ignore_case)
+        {
+            strs_copy[i] = upo_to_lower_case(strs[i]);
+            char *dup = NULL;
+            if ((dup = upo_ht_sepchain_put(table, &strs_copy[i], &strs_copy[i])) != NULL)
+                upo_dups_create_list(&list, dup);
+        }
+        else
+        {
+            char *dup = NULL;
+            if ((dup = upo_ht_sepchain_put(table, &strs[i], &strs[i])) != NULL)
+                upo_dups_create_list(&list, dup);
+        }
+    }
+
+    for (size_t i = 0; i < n; i++)
+        free(strs_copy[i]);
+
+    upo_ht_sepchain_destroy(table, 0);
+    free(strs_copy);
     return list;
 }
 
-void upo_dups_create_list(upo_strings_list_t *list)
+void *upo_to_lower_case(const char *src)
 {
-    
+    char *lowered = malloc(sizeof(char) * (strlen(src) + 1));
+    memset(lowered, '\0', sizeof(char) * (strlen(src) + 1));
+    strcpy(lowered, src);
+    char *temp = lowered;
+    for (; *temp; ++temp)
+        *temp = tolower(*temp);
+    return lowered;
+}
+
+void upo_dups_create_list(upo_strings_list_t *list, char *str)
+{
+    if (*list == NULL)
+    {
+        *list = malloc(sizeof(upo_strings_list_node_t));
+        (*list)->string_value = str;
+        (*list)->next = NULL;
+    }
+    else
+    {
+        upo_strings_list_node_t *node = (*list);
+        while (node->next != NULL)
+            node = node->next;
+        upo_strings_list_node_t *new_node = malloc(sizeof(upo_strings_list_node_t));
+        new_node->string_value = str;
+        new_node->next = NULL;
+        node->next = new_node;
+    }
+}
+
+void upo_destroy_dup_list(upo_strings_list_t *list)
+{
+    assert(list != NULL);
+    assert(*list != NULL);
+
+    while (*list != NULL)
+    {
+        upo_strings_list_node_t *node = *list;
+        *list = (*list)->next;
+        free(node);
+    }
+
+    *list = NULL;
 }
 
 int main(void)
 {
+    printf("Test null... ");
     upo_strings_list_t list = upo_find_dups(NULL, sizeof(NULL));
     assert(list == NULL);
     list = upo_find_idups(NULL, sizeof(NULL), 0);
     assert(list == NULL);
     list = upo_find_idups(NULL, sizeof(NULL), 1);
     assert(list == NULL);
+    printf("OK\n");
 
-    char *strings[] = {"Tre", "tigri", "contro", "tre", "tigri"};
+    printf("Test duplicates on string array... ");
+    const char *strings[] = {"Tre", "tigri", "contro", "tre", "tigri"};
+    list = upo_find_dups(strings, sizeof(strings) / sizeof(char *));
+    assert(list != NULL);
+
+    upo_destroy_dup_list(&list);
+
+    assert(list == NULL);
+    printf("OK\n");
+
+    printf("Test duplicates ignoring case on string array... ");
+    list = upo_find_idups(strings, sizeof(strings) / sizeof(char *), 1);
+    assert(list != NULL);
+
+    upo_destroy_dup_list(&list);
+
+    assert(list == NULL);
+
+    list = upo_find_idups(strings, sizeof(strings) / sizeof(char *), 0);
+    assert(list != NULL);
+
+    upo_destroy_dup_list(&list);
+
+    assert(list == NULL);
+    printf("OK\n");
 
     return EXIT_SUCCESS;
 }

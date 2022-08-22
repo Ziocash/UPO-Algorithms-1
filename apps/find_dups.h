@@ -37,12 +37,16 @@ struct upo_strings_list_node_s
 
 typedef struct upo_strings_list_node_s upo_strings_list_node_t;
 
-typedef struct upo_strings_list_node_t *upo_strings_list_t;
+typedef upo_strings_list_node_t *upo_strings_list_t;
 
 upo_strings_list_t upo_find_dups(const char **strs, size_t n);
 
 upo_strings_list_t upo_find_idups(const char **strs, size_t n, int ignore_case);
 
-static void upo_dups_create_list(upo_strings_list_t *list);
+static void upo_dups_create_list(upo_strings_list_t *list, char *str);
+
+static void *upo_to_lower_case(const char *src);
+
+static void upo_destroy_dup_list(upo_strings_list_t *list);
 
 #endif /* FIND_DUPS_H */
