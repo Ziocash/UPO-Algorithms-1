@@ -3,7 +3,7 @@
 /**
  * \file src/hashtable_private.h
  *
- * \brief Private header for the Hash Tbale abstract data type.
+ * \brief Private header for the Hash Table abstract data type.
  *
  * \author Simone Gattini, Federico Barbero, Anton Iliev
  *
