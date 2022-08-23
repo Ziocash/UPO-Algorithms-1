@@ -99,7 +99,7 @@ typedef upo_ht_key_list_node_t *upo_ht_key_list_t;
 #define UPO_HT_SEPCHAIN_DEFAULT_CAPACITY 997U
 
 /** \brief Type for hash tables with separate chaining. */
-typedef struct upo_ht_sepchain_olist_s *upo_ht_sepchain_t;
+typedef struct upo_ht_sepchain_s *upo_ht_sepchain_t;
 
 /**
  * \brief Creates a new empty hash table.
