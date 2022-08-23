@@ -735,3 +735,84 @@ size_t upo_ht_hash_str_stlport(const void *x, size_t m)
 }
 
 /*** END of HASH FUNCTIONS ***/
+
+/*** BEGIN of HASH TABLE with SEPARATE CHAINING with ORDERED LIST ***/
+
+upo_ht_sepchain_olist_t upo_ht_sepchain_olist_create(size_t m, upo_ht_hasher_t key_hash, upo_ht_comparator_t key_cmp)
+{
+    upo_ht_sepchain_olist_t ht = NULL;
+
+    assert(key_hash != NULL);
+    assert(key_cmp != NULL);
+
+    ht = malloc(sizeof(struct upo_ht_sepchain_olist_s));
+    if (ht == NULL)
+    {
+        perror("Error while allocating hash table memory");
+        abort();
+    }
+
+    if (m > 0)
+    {
+        ht->slots = malloc(m * sizeof(upo_ht_sepchain_olist_slot_t));
+        if (ht->slots == NULL)
+        {
+            perror("Error while allocating hash table slots memory");
+            abort();
+        }
+        for (size_t i = 0; i < m; i++)
+        {
+            ht->slots[i].head = NULL;
+        }
+        ht->size = 0;
+    }
+    else
+    {
+        ht->slots = NULL;
+    }
+
+    ht->capacity = m;
+    ht->size = 0;
+    ht->key_hash = key_hash;
+    ht->key_cmp = key_cmp;
+
+    return ht;
+}
+
+void upo_ht_sepchain_olist_destroy(upo_ht_sepchain_olist_t ht, int destroy_data)
+{
+    if (ht != NULL)
+    {
+        upo_ht_sepchain_olist_clear(ht, destroy_data);
+        free(ht->slots);
+        free(ht);
+    }
+}
+
+void upo_ht_sepchain_olist_clear(upo_ht_sepchain_olist_t ht, int destroy_data)
+{
+    if(ht != NULL)
+    {
+        size_t size = ht->size;
+        for(size_t i = 0; i < size; i++)
+        {
+            upo_ht_sepchain_olist_node_t *list = NULL;
+            list = ht->slots[i].head;
+            while(list != NULL)
+            {
+                upo_ht_sepchain_olist_node_t *node = list;
+                list = list->next;
+                if(destroy_data)
+                {
+                    free(node->key);
+                    free(node->value);
+                }
+                free(node);
+            }
+            ht->slots[i].head = NULL;
+        }
+        ht->size = 0;
+    }
+}
+
+/*** END of HASH TABLE with SEPARATE CHAINING with ORDERED LIST ***/
