@@ -399,6 +399,7 @@ void *upo_ht_linprob_put(upo_ht_linprob_t ht, void *key, void *value)
         ht->slots[hash].key = key;
         ht->slots[hash].value = value;
         ht->slots[hash].tombstone = 0;
+        ht->size += 1;
     }
     else
     {
@@ -436,6 +437,7 @@ void upo_ht_linprob_insert(upo_ht_linprob_t ht, void *key, void *value)
         ht->slots[hash].key = key;
         ht->slots[hash].value = value;
         ht->slots[hash].tombstone = 0;
+        ht->size += 1;
     }
 }
 
@@ -488,6 +490,7 @@ void upo_ht_linprob_delete(upo_ht_linprob_t ht, const void *key, int destroy_dat
         ht->slots[hash].tombstone = 1;
         if (upo_ht_linprob_load_factor(ht) <= 0.125)
             upo_ht_linprob_resize(ht, ht->capacity / 2);
+        ht->size -= 1;
     }
 }
 
@@ -791,18 +794,17 @@ void upo_ht_sepchain_olist_destroy(upo_ht_sepchain_olist_t ht, int destroy_data)
 
 void upo_ht_sepchain_olist_clear(upo_ht_sepchain_olist_t ht, int destroy_data)
 {
-    if(ht != NULL)
+    if (ht != NULL)
     {
-        size_t size = ht->size;
-        for(size_t i = 0; i < size; i++)
+        for (size_t i = 0; i < ht->capacity; i++)
         {
             upo_ht_sepchain_olist_node_t *list = NULL;
             list = ht->slots[i].head;
-            while(list != NULL)
+            while (list != NULL)
             {
                 upo_ht_sepchain_olist_node_t *node = list;
                 list = list->next;
-                if(destroy_data)
+                if (destroy_data)
                 {
                     free(node->key);
                     free(node->value);
@@ -813,6 +815,188 @@ void upo_ht_sepchain_olist_clear(upo_ht_sepchain_olist_t ht, int destroy_data)
         }
         ht->size = 0;
     }
+}
+
+void *upo_ht_sepchain_olist_get(const upo_ht_sepchain_olist_t ht, const void *key)
+{
+    if (ht == NULL || ht->slots == NULL)
+        return NULL;
+
+    upo_ht_comparator_t cmp = ht->key_cmp;
+    upo_ht_hasher_t hasher = ht->key_hash;
+    size_t hash = hasher(key, ht->capacity);
+    upo_ht_sepchain_olist_node_t *node = ht->slots[hash].head;
+
+    while (node != NULL && cmp(key, node->key) != 0)
+        node = node->next;
+    if (node != NULL)
+        return node->value;
+    else
+        return NULL;
+}
+
+int upo_ht_sepchain_olist_contains(const upo_ht_sepchain_olist_t ht, const void *key)
+{
+    if (ht == NULL || ht->slots == NULL)
+        return 0;
+
+    upo_ht_comparator_t cmp = ht->key_cmp;
+    upo_ht_hasher_t hasher = ht->key_hash;
+    size_t hash = hasher(key, ht->capacity);
+    upo_ht_sepchain_olist_node_t *node = ht->slots[hash].head;
+
+    while (node != NULL && cmp(key, node->key) != 0)
+        node = node->next;
+    if (node != NULL)
+        return 1;
+    else
+        return 0;
+}
+
+void *upo_ht_sepchain_olist_put(upo_ht_sepchain_olist_t ht, void *key, void *value)
+{
+    if (ht == NULL || ht->slots == NULL)
+        return NULL;
+
+    void *old_value = NULL;
+
+    upo_ht_hasher_t hasher = ht->key_hash;
+    size_t hash = hasher(key, ht->capacity);
+    upo_ht_sepchain_olist_node_t *node = ht->slots[hash].head;
+    upo_ht_sepchain_olist_node_t *previous = NULL;
+    upo_ht_comparator_t cmp = ht->key_cmp;
+
+    while (node != NULL && cmp(key, node->key) < 0)
+    {
+        previous = node;
+        node = node->next;
+    }
+    if (node == NULL)
+    {
+        node = malloc(sizeof(upo_ht_sepchain_olist_node_t));
+        node->key = key;
+        node->value = value;
+        node->next = ht->slots[hash].head;
+        ht->slots[hash].head = node;
+        ht->size += 1;
+    }
+    else if (cmp(key, node->key) == 0)
+    {
+        old_value = node->value;
+        node->value = value;
+    }
+    else
+    {
+        upo_ht_sepchain_olist_node_t *new_node = malloc(sizeof(upo_ht_sepchain_olist_node_t));
+        new_node->key = key;
+        new_node->value = value;
+        new_node->next = node;
+        previous->next = new_node;
+        ht->size += 1;
+    }
+
+    return old_value;
+}
+
+void upo_ht_sepchain_olist_insert(upo_ht_sepchain_olist_t ht, void *key, void *value)
+{
+    if (ht == NULL)
+        return;
+
+    upo_ht_hasher_t hasher = ht->key_hash;
+    size_t hash = hasher(key, ht->capacity);
+    upo_ht_sepchain_olist_node_t *node = ht->slots[hash].head;
+    upo_ht_sepchain_olist_node_t *previous = NULL;
+    upo_ht_comparator_t cmp = ht->key_cmp;
+
+    while (node != NULL && cmp(key, node->key) < 0)
+    {
+        previous = node;
+        node = node->next;
+    }
+    if (node == NULL)
+    {
+        node = malloc(sizeof(upo_ht_sepchain_olist_node_t));
+        node->key = key;
+        node->value = value;
+        node->next = ht->slots[hash].head;
+        ht->slots[hash].head = node;
+        ht->size += 1;
+    }
+    else if (cmp(key, node->key) > 0)
+    {
+        upo_ht_sepchain_olist_node_t *new_node = malloc(sizeof(upo_ht_sepchain_olist_node_t));
+        new_node->key = key;
+        new_node->value = value;
+        previous->next = new_node;
+        new_node->next = node;
+        ht->size += 1;
+    }
+}
+
+void upo_ht_sepchain_olist_delete(upo_ht_sepchain_olist_t ht, const void *key, int destroy_data)
+{
+    if (ht == NULL || ht->slots == NULL)
+        return;
+
+    upo_ht_hasher_t hasher = ht->key_hash;
+    size_t hash = hasher(key, ht->capacity);
+    upo_ht_sepchain_olist_node_t *node = ht->slots[hash].head;
+    upo_ht_sepchain_olist_node_t *previous = NULL;
+    upo_ht_comparator_t cmp = ht->key_cmp;
+
+    while (node != NULL && cmp(key, node->key) != 0)
+    {
+        previous = node;
+        node = node->next;
+    }
+
+    if (node != NULL)
+    {
+        if (previous == NULL)
+            ht->slots[hash].head = node->next;
+        else
+            previous->next = node->next;
+        if (destroy_data)
+        {
+            free(node->key);
+            free(node->value);
+        }
+        free(node);
+    }
+}
+
+size_t upo_ht_sepchain_olist_size(const upo_ht_sepchain_olist_t ht)
+{
+    if (ht == NULL)
+        return 0;
+    size_t size = 0;
+    for (size_t i = 0; i < ht->capacity; i++)
+    {
+        upo_ht_sepchain_olist_node_t *node = ht->slots[i].head;
+        while (node != NULL)
+        {
+            if (node->key != NULL)
+                size++;
+            node = node->next;
+        }
+    }
+    return size;
+}
+
+size_t upo_ht_sepchain_olist_capacity(const upo_ht_sepchain_olist_t ht)
+{
+    return ht != NULL ? ht->capacity : 0;
+}
+
+double upo_ht_sepchain_olist_load_factor(const upo_ht_sepchain_olist_t ht)
+{
+    return ht != NULL ? upo_ht_sepchain_olist_size(ht) / (double)upo_ht_sepchain_olist_capacity(ht) : 0.0;
+}
+
+int upo_ht_sepchain_olist_is_empty(const upo_ht_sepchain_olist_t ht)
+{
+    return upo_ht_sepchain_olist_size(ht) == 0 ? 1 : 0;
 }
 
 /*** END of HASH TABLE with SEPARATE CHAINING with ORDERED LIST ***/
