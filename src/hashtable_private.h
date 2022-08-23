@@ -103,6 +103,40 @@ static void upo_ht_linprob_resize(upo_ht_linprob_t ht, size_t n);
 
 /*** END of HASH TABLE with LINEAR PROBING ***/
 
-void upo_ht_build_key_list(void *key, upo_ht_key_list_t *list);
+static void upo_ht_build_key_list(void *key, upo_ht_key_list_t *list);
+
+/*** BEGIN of HASH TABLE with SEPARATE CHAINING with ORDERED LIST ***/
+
+/** \brief Type for nodes of the ordered list of collisions. */
+struct upo_ht_sepchain_olist_node_s
+{
+    void *key; /**< Pointer to the user-provided key. */
+    void *value; /**< Pointer to the value associated to the key. */
+    struct upo_ht_sepchain_olist_node_s *next; /**< Pointer to the next node in the ordered list. */
+};
+
+/** \brief Alias for the type for nodes of the ordered list of collisions. */
+typedef struct upo_ht_sepchain_olist_node_s upo_ht_sepchain_olist_node_t;
+
+/** \brief Type for slots of hash tables with separate chaining. */
+struct upo_ht_sepchain_olist_slot_s
+{
+    upo_ht_sepchain_olist_node_t *head; /**< Pointer to the head of the ordered list of collisions. */
+};
+/** \brief Alias for the type for slots of hash tables with separate chaining. */
+typedef struct upo_ht_sepchain_olist_slot_s upo_ht_sepchain_olist_slot_t;
+
+/** \brief Type for hash tables with separate chaining. */
+struct upo_ht_sepchain_olist_s
+{
+    upo_ht_sepchain_olist_slot_t *slots; /**< The hash table as array of slots. */
+    size_t capacity; /**< The capacity of the hash table. */
+    size_t size; /**< The number of elements stored in the hash table. */
+    upo_ht_hasher_t key_hash; /**< The key hash function. */
+    upo_ht_comparator_t key_cmp; /**< The key comparison function. */
+};
+
+
+/*** END of HASH TABLE with SEPARATE CHAINING with ORDERED LIST ***/
 
 #endif /* UPO_HASHTABLE_PRIVATE_H */

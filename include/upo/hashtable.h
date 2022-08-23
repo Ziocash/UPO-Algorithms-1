@@ -31,12 +31,9 @@
 #ifndef UPO_HASHTABLE_H
 #define UPO_HASHTABLE_H
 
-
 #include <stddef.h>
 
-
 /*** BEGIN of COMMON TYPES ***/
-
 
 /** \brief The type for hash functions.
  *
@@ -48,7 +45,7 @@
  * A hash function returns a nonnegative number which represents a position
  * (index) in the hash table.
  */
-typedef size_t (*upo_ht_hasher_t)(const void*, size_t);
+typedef size_t (*upo_ht_hasher_t)(const void *, size_t);
 
 /**
  * \brief The type for key comparison functions.
@@ -62,7 +59,7 @@ typedef size_t (*upo_ht_hasher_t)(const void*, size_t);
  * zero if the first key (first argument) is less than, equal to, or greater
  * than the second key (second argument), respectively.
  */
-typedef int (*upo_ht_comparator_t)(const void*, const void*);
+typedef int (*upo_ht_comparator_t)(const void *, const void *);
 
 /**
  * \brief The type for visit functions.
@@ -80,11 +77,12 @@ typedef int (*upo_ht_comparator_t)(const void*, const void*);
  *   integer variable representing the key counter that it is updated each time
  *   the visit function is called.
  */
-typedef void (*upo_ht_visitor_t)(void*, void*, void*);
+typedef void (*upo_ht_visitor_t)(void *, void *, void *);
 
 /** \brief The type for nodes of list of keys. */
-struct upo_ht_key_list_node_s {
-    void *key; /**< Pointer to the key. */
+struct upo_ht_key_list_node_s
+{
+    void *key;                           /**< Pointer to the key. */
     struct upo_ht_key_list_node_s *next; /**< Pointer to the next node in the list. */
 };
 /** \brief Alias for the type for nodes of list of keys. */
@@ -93,20 +91,15 @@ typedef struct upo_ht_key_list_node_s upo_ht_key_list_node_t;
 /** \brief The type for list of keys. */
 typedef upo_ht_key_list_node_t *upo_ht_key_list_t;
 
-
 /*** END of COMMON TYPES ***/
 
-
 /*** BEGIN of HASH TABLE with SEPARATE CHAINING ***/
-
 
 /** \brief Default capacity of hash tables with separate chaining. */
 #define UPO_HT_SEPCHAIN_DEFAULT_CAPACITY 997U
 
-
 /** \brief Type for hash tables with separate chaining. */
-typedef struct upo_ht_sepchain_s* upo_ht_sepchain_t;
-
+typedef struct upo_ht_sepchain_olist_s *upo_ht_sepchain_t;
 
 /**
  * \brief Creates a new empty hash table.
@@ -164,7 +157,7 @@ void upo_ht_sepchain_clear(upo_ht_sepchain_t ht, int destroy_data);
  *
  * Worst-case complexity: linear in the number `n` of elements, `O(n)`.
  */
-void* upo_ht_sepchain_put(upo_ht_sepchain_t ht, void *key, void *value);
+void *upo_ht_sepchain_put(upo_ht_sepchain_t ht, void *key, void *value);
 
 /**
  * \brief Inserts the given value identified by the provided key in the given
@@ -190,7 +183,7 @@ void upo_ht_sepchain_insert(upo_ht_sepchain_t ht, void *key, void *value);
  *
  * Worst-case complexity: linear in the number `n` of elements, `O(n)`.
  */
-void* upo_ht_sepchain_get(const upo_ht_sepchain_t ht, const void *key);
+void *upo_ht_sepchain_get(const upo_ht_sepchain_t ht, const void *key);
 
 /**
  * \brief Tells if the given hash table contains an item identified by
@@ -302,19 +295,15 @@ upo_ht_comparator_t upo_ht_sepchain_get_comparator(const upo_ht_sepchain_t ht);
  */
 upo_ht_hasher_t upo_ht_sepchain_get_hasher(const upo_ht_sepchain_t ht);
 
-
 /*** END of HASH TABLE with SEPARATE CHAINING ***/
 
-
 /*** BEGIN of HASH TABLE with OPEN ADDRESSING ***/
-
 
 /** \brief Initial capacity of hash tables with linear probing. */
 #define UPO_HT_LINPROB_DEFAULT_CAPACITY 16U
 
 /** \brief Type for hash tables with linear probing. */
-typedef struct upo_ht_linprob_s* upo_ht_linprob_t;
-
+typedef struct upo_ht_linprob_s *upo_ht_linprob_t;
 
 /**
  * \brief Creates a new empty hash table.
@@ -372,7 +361,7 @@ void upo_ht_linprob_clear(upo_ht_linprob_t ht, int destroy_data);
  *
  * Worst-case complexity: linear in the number `n` of elements, `O(n)`.
  */
-void* upo_ht_linprob_put(upo_ht_linprob_t ht, void *key, void *value);
+void *upo_ht_linprob_put(upo_ht_linprob_t ht, void *key, void *value);
 
 /**
  * \brief Inserts the given value identified by the provided key in the given
@@ -398,7 +387,7 @@ void upo_ht_linprob_insert(upo_ht_linprob_t ht, void *key, void *value);
  *
  * Worst-case complexity: linear in the number `n` of elements, `O(n)`.
  */
-void* upo_ht_linprob_get(const upo_ht_linprob_t ht, const void *key);
+void *upo_ht_linprob_get(const upo_ht_linprob_t ht, const void *key);
 
 /**
  * \brief Tells if the given hash table contains an item identified by
@@ -510,12 +499,9 @@ upo_ht_comparator_t upo_ht_linprob_get_comparator(const upo_ht_linprob_t ht);
  */
 upo_ht_hasher_t upo_ht_linprob_get_hasher(const upo_ht_linprob_t ht);
 
-
 /*** END of HASH TABLE with OPEN ADDRESSING ***/
 
-
 /*** BEGIN of HASH FUNCTIONS ***/
-
 
 /**
  * \brief Hash function for integers that uses the division method.
@@ -580,7 +566,7 @@ size_t upo_ht_hash_int_mult_knuth(const void *x, size_t m);
  *
  * The implemented hash function is the following:
  * \f[
- *     h(k) = h_0 \left( \big(\sum_{i=0}^{\ell-1} k_i\cdot a^i \big) \bmod m \right), 
+ *     h(k) = h_0 \left( \big(\sum_{i=0}^{\ell-1} k_i\cdot a^i \big) \bmod m \right),
  * \f]
  * where:
  * - \f$k=(k_0,\ldots,k_{\ell-1})\f$ is an array of characters of size \$\ell\$
@@ -634,8 +620,59 @@ size_t upo_ht_hash_str_kr2e(const void *s, size_t m);
  */
 size_t upo_ht_hash_str_sgistl(const void *s, size_t m);
 
-
 /*** END of HASH FUNCTIONS ***/
 
+/** \brief The hash table with separate chaining (based on ordered linked lists)
+abstract data type. */
+typedef struct upo_ht_sepchain_olist_s *upo_ht_sepchain_olist_t;
+
+/** \brief Creates a new hash table with separate chaining (based on ordered linked
+lists). */
+upo_ht_sepchain_olist_t upo_ht_sepchain_olist_create(size_t m, upo_ht_hasher_t key_hash, upo_ht_comparator_t key_cmp);
+
+/** \brief Destroys the given hash table with separate chaining (based on ordered
+linked lists). */
+void upo_ht_sepchain_olist_destroy(upo_ht_sepchain_olist_t ht, int destroy_data);
+
+/** \brief Removes all elements from the given hash table with separate chaining (based
+on ordered linked lists). */
+void upo_ht_sepchain_olist_clear(upo_ht_sepchain_olist_t ht, int destroy_data);
+
+/** \brief Returns value associated to the given key in the given hash table with
+separate chaining (based on ordered linked lists). */
+void *upo_ht_sepchain_olist_get(const upo_ht_sepchain_olist_t ht, const void *key);
+
+/** \brief Tells whether the given key is present in the given hash table with separate
+chaining (based on ordered linked lists). */
+int upo_ht_sepchain_olist_contains(const upo_ht_sepchain_olist_t ht, const void *key);
+
+/** \brief Inserts/updates the given key-value pair into the given hash table with
+separate chaining (based on ordered linked lists). */
+void *upo_ht_sepchain_olist_put(upo_ht_sepchain_olist_t ht, void *key, void *value);
+
+/** \brief Inserts the given key-value pair into the given hash table with separate
+chaining (based on ordered linked lists); updates are ignored. */
+void upo_ht_sepchain_olist_insert(upo_ht_sepchain_olist_t ht, void *key, void *value);
+
+/** \brief Removes the key-value pair associated to the given key from the given hash
+table with separate chaining (based on ordered linked lists). */
+void upo_ht_sepchain_olist_delete(upo_ht_sepchain_olist_t ht, const void *key, int destroy_data);
+
+/** \brief Returns the capacity of the given hash table with separate chaining (based
+on ordered linked lists). */
+size_t upo_ht_sepchain_olist_capacity(const upo_ht_sepchain_olist_t ht);
+
+/** \brief Returns the number of stored keys in the given hash table with separate
+chaining (based on ordered linked lists). */
+
+size_t upo_ht_sepchain_olist_size(const upo_ht_sepchain_olist_t ht);
+
+/** \brief Returns the load factor of the given hash table with separate chaining
+(based on ordered linked lists). */
+double upo_ht_sepchain_olist_load_factor(const upo_ht_sepchain_olist_t ht);
+
+/** \brief Tells whether the given hash table with separate chaining (based on ordered
+linked lists) is empty. */
+int upo_ht_sepchain_olist_is_empty(const upo_ht_sepchain_olist_t ht);
 
 #endif /* UPO_HASHTABLE_H */
