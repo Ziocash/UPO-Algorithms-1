@@ -372,7 +372,6 @@ void test_traverse()
     upo_ht_sepchain_destroy(ht, 0);
 }
 
-
 int main()
 {
     printf("Test case 'keys'... ");
@@ -384,7 +383,6 @@ int main()
     fflush(stdout);
     test_traverse();
     printf("OK\n");
-
 
     return 0;
 }
