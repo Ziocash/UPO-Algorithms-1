@@ -644,6 +644,16 @@ void upo_ht_linprob_traverse(const upo_ht_linprob_t ht, upo_ht_visitor_t visit, 
     }
 }
 
+void upo_ht_linprob_merge(upo_ht_linprob_t dest_ht, const upo_ht_linprob_t src_ht)
+{
+    if (dest_ht == NULL || src_ht == NULL)
+        return;
+
+    for (size_t i = 0; i < src_ht->capacity; i++)
+        if (src_ht->slots[i].key != NULL)
+            upo_ht_linprob_insert(dest_ht, src_ht->slots[i].key, src_ht->slots[i].value);
+}
+
 /*** EXERCISE #3 - END of HASH TABLE - EXTRA OPERATIONS ***/
 
 /*** BEGIN of HASH FUNCTIONS ***/

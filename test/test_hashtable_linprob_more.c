@@ -27,11 +27,10 @@
 #include <upo/hashtable.h>
 #include <upo/error.h>
 
-
-#define MAX(x,y) ((x) > (y) ? (x) : (y))
-
+#define MAX(x, y) ((x) > (y) ? (x) : (y))
 
 static int int_compare(const void *a, const void *b);
+static int str_compare(const void *a, const void *b);
 #ifdef UPO_DEBUG
 static void int_key_value_print(void *key, void *value, void *info);
 #endif // UPO_DEBUG
@@ -39,7 +38,7 @@ static void count_key_visit(void *key, void *value, void *info);
 
 static void test_keys();
 static void test_traverse();
-
+static void test_merge();
 
 int int_compare(const void *a, const void *b)
 {
@@ -47,6 +46,17 @@ int int_compare(const void *a, const void *b)
     const int *bb = b;
 
     return (*aa > *bb) - (*aa < *bb);
+}
+
+int str_compare(const void *a, const void *b)
+{
+    const char **aa = (const char **)a;
+    const char **bb = (const char **)b;
+
+    assert(a != NULL);
+    assert(b != NULL);
+
+    return strcmp(*aa, *bb);
 }
 
 #ifdef UPO_DEBUG
@@ -81,9 +91,9 @@ void count_key_visit(void *key, void *value, void *info)
 {
     size_t *counter = info;
 
-    assert( info != NULL );
+    assert(info != NULL);
 
-    (void) value;
+    (void)value;
 
     if (key != NULL)
     {
@@ -93,11 +103,11 @@ void count_key_visit(void *key, void *value, void *info)
 
 void test_keys()
 {
-    int keys1[] = {0,1,2,3,4,5,6,7,8,9};
-    int keys2[] = {0,10,20,30,40,50,60,70,80,90};
-    int keys3[] = {0,1,2,3,4,10,11,12,13,14};
-    int values[] = {0,1,2,3,4,5,6,7,8,9};
-    size_t m = MAX( MAX(sizeof keys1/sizeof keys1[0], sizeof keys1/sizeof keys2[0]), sizeof keys1/sizeof keys3[0] );
+    int keys1[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+    int keys2[] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90};
+    int keys3[] = {0, 1, 2, 3, 4, 10, 11, 12, 13, 14};
+    int values[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+    size_t m = MAX(MAX(sizeof keys1 / sizeof keys1[0], sizeof keys1 / sizeof keys2[0]), sizeof keys1 / sizeof keys3[0]);
     size_t n = 0;
     size_t i = 0;
     upo_ht_linprob_t ht;
@@ -107,20 +117,20 @@ void test_keys()
 
     ht = upo_ht_linprob_create(UPO_HT_SEPCHAIN_DEFAULT_CAPACITY, upo_ht_hash_int_div, int_compare);
 
-    assert( ht != NULL );
+    assert(ht != NULL);
 
     key_list = upo_ht_linprob_keys(ht);
-    assert( key_list == NULL );
+    assert(key_list == NULL);
 
     upo_ht_linprob_destroy(ht, 0);
 
     /* HT: no collision */
 
-    ht = upo_ht_linprob_create(2*m*UPO_HT_SEPCHAIN_DEFAULT_CAPACITY, upo_ht_hash_int_div, int_compare);
+    ht = upo_ht_linprob_create(2 * m * UPO_HT_SEPCHAIN_DEFAULT_CAPACITY, upo_ht_hash_int_div, int_compare);
 
-    assert( ht != NULL );
+    assert(ht != NULL);
 
-    n = sizeof keys1/sizeof keys1[0];
+    n = sizeof keys1 / sizeof keys1[0];
 
     /* Insertion */
     for (i = 0; i < n; ++i)
@@ -130,7 +140,7 @@ void test_keys()
 
     /* Keys */
     key_list = upo_ht_linprob_keys(ht);
-    assert( key_list != NULL );
+    assert(key_list != NULL);
     /* Check that each key is in the list */
     for (i = 0; i < n; ++i)
     {
@@ -142,7 +152,7 @@ void test_keys()
         {
             ; /* empty */
         }
-        assert( node != NULL );
+        assert(node != NULL);
     }
     while (key_list != NULL)
     {
@@ -159,17 +169,17 @@ void test_keys()
 
     /* Keys */
     key_list = upo_ht_linprob_keys(ht);
-    assert( key_list == NULL );
+    assert(key_list == NULL);
 
     upo_ht_linprob_destroy(ht, 0);
 
     /* HT: all collisions */
 
-    ht = upo_ht_linprob_create(m*UPO_HT_SEPCHAIN_DEFAULT_CAPACITY, upo_ht_hash_int_div, int_compare);
+    ht = upo_ht_linprob_create(m * UPO_HT_SEPCHAIN_DEFAULT_CAPACITY, upo_ht_hash_int_div, int_compare);
 
-    assert( ht != NULL );
+    assert(ht != NULL);
 
-    n = sizeof keys2/sizeof keys2[0];
+    n = sizeof keys2 / sizeof keys2[0];
     /* Insertion */
     for (i = 0; i < n; ++i)
     {
@@ -178,7 +188,7 @@ void test_keys()
 
     /* Keys */
     key_list = upo_ht_linprob_keys(ht);
-    assert( key_list != NULL );
+    assert(key_list != NULL);
     /* Check that each key is in the list */
     for (i = 0; i < n; ++i)
     {
@@ -190,7 +200,7 @@ void test_keys()
         {
             ; /* empty */
         }
-        assert( node != NULL );
+        assert(node != NULL);
     }
     while (key_list != NULL)
     {
@@ -207,7 +217,7 @@ void test_keys()
 
     /* Keys */
     key_list = upo_ht_linprob_keys(ht);
-    assert( key_list == NULL );
+    assert(key_list == NULL);
 
     upo_ht_linprob_destroy(ht, 0);
 
@@ -215,9 +225,9 @@ void test_keys()
 
     ht = upo_ht_linprob_create(UPO_HT_SEPCHAIN_DEFAULT_CAPACITY, upo_ht_hash_int_div, int_compare);
 
-    assert( ht != NULL );
+    assert(ht != NULL);
 
-    n = sizeof keys3/sizeof keys3[0];
+    n = sizeof keys3 / sizeof keys3[0];
     /* Insertion */
     for (i = 0; i < n; ++i)
     {
@@ -226,7 +236,7 @@ void test_keys()
 
     /* Keys */
     key_list = upo_ht_linprob_keys(ht);
-    assert( key_list != NULL );
+    assert(key_list != NULL);
     /* Check that each key is in the list */
     for (i = 0; i < n; ++i)
     {
@@ -238,7 +248,7 @@ void test_keys()
         {
             ; /* empty */
         }
-        assert( node != NULL );
+        assert(node != NULL);
     }
     while (key_list != NULL)
     {
@@ -255,18 +265,18 @@ void test_keys()
 
     /* Keys */
     key_list = upo_ht_linprob_keys(ht);
-    assert( key_list == NULL );
+    assert(key_list == NULL);
 
     upo_ht_linprob_destroy(ht, 0);
 }
 
 void test_traverse()
 {
-    int keys1[] = {0,1,2,3,4,5,6,7,8,9};
-    int keys2[] = {0,10,20,30,40,50,60,70,80,90};
-    int keys3[] = {0,1,2,3,4,10,11,12,13,14};
-    int values[] = {0,1,2,3,4,5,6,7,8,9};
-    size_t m = MAX( MAX(sizeof keys1/sizeof keys1[0], sizeof keys1/sizeof keys2[0]), sizeof keys1/sizeof keys3[0] );
+    int keys1[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+    int keys2[] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90};
+    int keys3[] = {0, 1, 2, 3, 4, 10, 11, 12, 13, 14};
+    int values[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+    size_t m = MAX(MAX(sizeof keys1 / sizeof keys1[0], sizeof keys1 / sizeof keys2[0]), sizeof keys1 / sizeof keys3[0]);
     size_t n = 0;
     size_t i;
     upo_ht_linprob_t ht;
@@ -276,21 +286,21 @@ void test_traverse()
 
     ht = upo_ht_linprob_create(UPO_HT_SEPCHAIN_DEFAULT_CAPACITY, upo_ht_hash_int_div, int_compare);
 
-    assert( ht != NULL );
+    assert(ht != NULL);
 
     key_counter = 0;
     upo_ht_linprob_traverse(ht, count_key_visit, &key_counter);
-    assert( key_counter == 0 );
+    assert(key_counter == 0);
 
     upo_ht_linprob_destroy(ht, 0);
 
     /* HT: no collision */
 
-    ht = upo_ht_linprob_create(2*m*UPO_HT_SEPCHAIN_DEFAULT_CAPACITY, upo_ht_hash_int_div, int_compare);
+    ht = upo_ht_linprob_create(2 * m * UPO_HT_SEPCHAIN_DEFAULT_CAPACITY, upo_ht_hash_int_div, int_compare);
 
-    assert( ht != NULL );
+    assert(ht != NULL);
 
-    n = sizeof keys1/sizeof keys1[0];
+    n = sizeof keys1 / sizeof keys1[0];
     /* Insertion */
     for (i = 0; i < n; ++i)
     {
@@ -299,7 +309,7 @@ void test_traverse()
 
     key_counter = 0;
     upo_ht_linprob_traverse(ht, count_key_visit, &key_counter);
-    assert( key_counter == n );
+    assert(key_counter == n);
 
     /* Removal */
     for (i = 0; i < n; ++i)
@@ -309,17 +319,17 @@ void test_traverse()
 
     key_counter = 0;
     upo_ht_linprob_traverse(ht, count_key_visit, &key_counter);
-    assert( key_counter == 0 );
+    assert(key_counter == 0);
 
     upo_ht_linprob_destroy(ht, 0);
 
     /* HT: all collisions */
 
-    ht = upo_ht_linprob_create(m*UPO_HT_SEPCHAIN_DEFAULT_CAPACITY, upo_ht_hash_int_div, int_compare);
+    ht = upo_ht_linprob_create(m * UPO_HT_SEPCHAIN_DEFAULT_CAPACITY, upo_ht_hash_int_div, int_compare);
 
-    assert( ht != NULL );
+    assert(ht != NULL);
 
-    n = sizeof keys2/sizeof keys2[0];
+    n = sizeof keys2 / sizeof keys2[0];
     /* Insertion */
     for (i = 0; i < n; ++i)
     {
@@ -328,7 +338,7 @@ void test_traverse()
 
     key_counter = 0;
     upo_ht_linprob_traverse(ht, count_key_visit, &key_counter);
-    assert( key_counter == n );
+    assert(key_counter == n);
 
     /* Removal */
     for (i = 0; i < n; ++i)
@@ -338,7 +348,7 @@ void test_traverse()
 
     key_counter = 0;
     upo_ht_linprob_traverse(ht, count_key_visit, &key_counter);
-    assert( key_counter == 0 );
+    assert(key_counter == 0);
 
     upo_ht_linprob_destroy(ht, 0);
 
@@ -346,9 +356,9 @@ void test_traverse()
 
     ht = upo_ht_linprob_create(UPO_HT_SEPCHAIN_DEFAULT_CAPACITY, upo_ht_hash_int_div, int_compare);
 
-    assert( ht != NULL );
+    assert(ht != NULL);
 
-    n = sizeof keys3/sizeof keys3[0];
+    n = sizeof keys3 / sizeof keys3[0];
     /* Insertion */
     for (i = 0; i < n; ++i)
     {
@@ -357,7 +367,7 @@ void test_traverse()
 
     key_counter = 0;
     upo_ht_linprob_traverse(ht, count_key_visit, &key_counter);
-    assert( key_counter == n );
+    assert(key_counter == n);
 
     /* Removal */
     for (i = 0; i < n; ++i)
@@ -367,11 +377,74 @@ void test_traverse()
 
     key_counter = 0;
     upo_ht_linprob_traverse(ht, count_key_visit, &key_counter);
-    assert( key_counter == 0 );
+    assert(key_counter == 0);
 
     upo_ht_linprob_destroy(ht, 0);
 }
 
+void test_merge()
+{
+
+    char *str_keys[] = {"alice", "bob", "charlie", "dany", "eric", "george", "john", "katy", "luke", "mark"};
+    char *str_keys2[] = {"ALICE", "BOB", "CHARLIE", "DANY", "ERIC", "GEORGE", "JOHN", "KATY", "LUKE", "MARK"};
+    int values_src[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+    int values_dest[] = {18, 12, 16, 31, 15, 3, 0, 9, 15, 20};
+
+    size_t n = sizeof(str_keys) / sizeof(char *);
+
+    upo_ht_linprob_t src_ht = NULL, dest_ht = NULL;
+    src_ht = upo_ht_linprob_create(UPO_HT_LINPROB_DEFAULT_CAPACITY, upo_ht_hash_str_kr2e, str_compare);
+    dest_ht = upo_ht_linprob_create(UPO_HT_LINPROB_DEFAULT_CAPACITY, upo_ht_hash_str_java, str_compare);
+
+    assert(src_ht != NULL);
+    assert(dest_ht != NULL);
+
+    for (size_t i = 0; i < n; i++)
+    {
+        upo_ht_linprob_put(src_ht, &str_keys[i], &values_src[i]);
+        upo_ht_linprob_put(dest_ht, &str_keys[i], &values_dest[i]);
+    }
+
+    upo_ht_linprob_merge(dest_ht, src_ht);
+
+    for (size_t i = 0; i < n; i++)
+    {
+        int *value = upo_ht_linprob_get(dest_ht, &str_keys[i]);
+
+        assert(value != NULL);
+        assert(*value == values_dest[i]);
+    }
+
+    upo_ht_linprob_clear(src_ht, 0);
+    upo_ht_linprob_clear(dest_ht, 0);
+
+    for (size_t i = 0; i < n; i++)
+    {
+        upo_ht_linprob_put(src_ht, &str_keys2[i], &values_src[i]);
+        upo_ht_linprob_put(dest_ht, &str_keys[i], &values_dest[i]);
+    }
+
+    upo_ht_linprob_merge(dest_ht, src_ht);
+
+    for (size_t i = 0; i < n; i++)
+    {
+        int *value = upo_ht_linprob_get(dest_ht, &str_keys[i]);
+
+        assert(value != NULL);
+        assert(*value == values_dest[i]);
+    }
+
+    for (size_t i = 0; i < n; i++)
+    {
+        int *value = upo_ht_linprob_get(dest_ht, &str_keys2[i]);
+
+        assert(value != NULL);
+        assert(*value == values_src[i]);
+    }
+
+    upo_ht_linprob_destroy(src_ht, 0);
+    upo_ht_linprob_destroy(dest_ht, 0);
+}
 
 int main()
 {
@@ -385,6 +458,10 @@ int main()
     test_traverse();
     printf("OK\n");
 
+    printf("Test case 'merge'... ");
+    fflush(stdout);
+    test_merge();
+    printf("OK\n");
 
     return 0;
 }

@@ -675,4 +675,6 @@ double upo_ht_sepchain_olist_load_factor(const upo_ht_sepchain_olist_t ht);
 linked lists) is empty. */
 int upo_ht_sepchain_olist_is_empty(const upo_ht_sepchain_olist_t ht);
 
+void upo_ht_linprob_merge(upo_ht_linprob_t dest_ht, const upo_ht_linprob_t src_ht);
+
 #endif /* UPO_HASHTABLE_H */
