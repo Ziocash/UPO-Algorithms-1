@@ -167,23 +167,23 @@ void upo_bubble_sort(void *base, size_t n, size_t size, upo_sort_comparator_t cm
 
 void upo_quick_sort_median3_cutoff(void *base, size_t n, size_t size, upo_sort_comparator_t cmp)
 {
-    upo_quick_sort_median3_cutoff_rec(base, 0, n - 1, size, cmp);
+    upo_quick_sort_median3_cutoff_driver_topdown(base, 0, n - 1, size, cmp);
 }
 
-void upo_quick_sort_median3_cutoff_rec(void *base, size_t lo, size_t hi, size_t size, upo_sort_comparator_t cmp)
+void upo_quick_sort_median3_cutoff_driver_topdown(void *base, size_t lo, size_t hi, size_t size, upo_sort_comparator_t cmp)
 {
     if (lo >= hi)
         return;
-    if (lo + (hi - lo) <= 10)
+    if ((hi - lo + 1) <= 10)
     {
-        upo_insertion_sort(base, hi + 1, size, cmp);
+        upo_insertion_sort((unsigned char *)base + lo * size, hi - lo + 1, size, cmp);
         return;
     }
 
     size_t j = upo_quick_sort_median3_cutoff_partition(base, lo, hi, size, cmp);
     if (j > 0)
-        upo_quick_sort_median3_cutoff_rec(base, lo, j, size, cmp);
-    upo_quick_sort_median3_cutoff_rec(base, j + 1, hi, size, cmp);
+        upo_quick_sort_median3_cutoff_driver_topdown(base, lo, j - 1, size, cmp);
+    upo_quick_sort_median3_cutoff_driver_topdown(base, j + 1, hi, size, cmp);
 }
 
 size_t upo_quick_sort_median3_cutoff_partition(void *base, size_t lo, size_t hi, size_t size, upo_sort_comparator_t cmp)
@@ -191,13 +191,24 @@ size_t upo_quick_sort_median3_cutoff_partition(void *base, size_t lo, size_t hi,
     size_t mid = lo + (hi - lo) / 2;
 
     unsigned char *array = base;
+    // Assuming that we need to swap many pointers, it's convenient to store such pointers
+    unsigned char *lo_ptr = array + lo * size;
+    unsigned char *mid_ptr = array + mid * size;
+    unsigned char *hi_ptr = array + hi * size;
 
-    if (cmp(array + hi * size, array + lo * size) < 0)
-        upo_swap(array + lo * size, array + hi * size, size);
-    if (cmp(array + mid * size, array + lo * size) < 0)
-        upo_swap(array + lo * size, array + mid * size, size);
-    if (cmp(array + mid * size, array + hi * size) < 0)
-        upo_swap(array + hi * size, array + mid * size, size);
+    // Median selection
+    if (cmp(lo_ptr, mid_ptr) > 0)
+        upo_swap(lo_ptr, mid_ptr, size);
+    if (cmp(lo_ptr, hi_ptr) > 0)
+        upo_swap(lo_ptr, hi_ptr, size);
+    if (cmp(mid_ptr, hi_ptr) > 0)
+        upo_swap(mid_ptr, hi_ptr, size);
+
+    if (hi - lo + 1 <= 3)
+        return mid;
+
+    //Setting middle element into lo + 1 position
+    upo_swap(mid_ptr, array + (lo + 1) * size, size);
 
     return upo_quick_sort_partition(base, lo + 1, hi - 1, size, cmp);
 }

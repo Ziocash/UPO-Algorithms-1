@@ -56,7 +56,7 @@ static void upo_quick_sort_rec(void *base, size_t lo, size_t hi, size_t size, up
 
 static size_t upo_quick_sort_partition(void *base, size_t lo, size_t hi, size_t size, upo_sort_comparator_t cmp);
 
-static void upo_quick_sort_median3_cutoff_rec(void *base, size_t lo, size_t hi, size_t size, upo_sort_comparator_t cmp);
+static void upo_quick_sort_median3_cutoff_driver_topdown(void *base, size_t lo, size_t hi, size_t size, upo_sort_comparator_t cmp);
 
 static size_t upo_quick_sort_median3_cutoff_partition(void *base, size_t lo, size_t hi, size_t size, upo_sort_comparator_t cmp);
 
