@@ -136,22 +136,6 @@ void upo_quick_sort_rec(void *base, size_t lo, size_t hi, size_t size, upo_sort_
     upo_quick_sort_rec(base, j + 1, hi, size, cmp);
 }
 
-size_t upo_quick_sort_partition(void *base, size_t lo, size_t hi, size_t size, upo_sort_comparator_t cmp)
-{
-    size_t p = lo, i = lo, j = hi;
-    unsigned char *array = base;
-    while (i < j)
-    {
-        while ((i < hi) && (cmp(array + i * size, array + p * size) < 0))
-            i++;
-        while ((j > lo) && (cmp(array + j * size, array + p * size) > 0))
-            j--;
-        upo_swap(array + i * size, array + j * size, size);
-    }
-    upo_swap(array + p * size, array + j * size, size);
-    return j;
-}
-
 void upo_bubble_sort(void *base, size_t n, size_t size, upo_sort_comparator_t cmp)
 {
     unsigned char *ptr = base;
@@ -172,43 +156,88 @@ void upo_quick_sort_median3_cutoff(void *base, size_t n, size_t size, upo_sort_c
 
 void upo_quick_sort_median3_cutoff_driver_topdown(void *base, size_t lo, size_t hi, size_t size, upo_sort_comparator_t cmp)
 {
+    size_t pivot;
     if (lo >= hi)
+    {
         return;
+    }
     if ((hi - lo + 1) <= 10)
     {
         upo_insertion_sort((unsigned char *)base + lo * size, hi - lo + 1, size, cmp);
         return;
     }
 
-    size_t j = upo_quick_sort_median3_cutoff_partition(base, lo, hi, size, cmp);
+    size_t j = upo_quick_sort_median3_partition(base, lo, hi, size, cmp);
     if (j > 0)
         upo_quick_sort_median3_cutoff_driver_topdown(base, lo, j - 1, size, cmp);
     upo_quick_sort_median3_cutoff_driver_topdown(base, j + 1, hi, size, cmp);
+    /* Partitions the whole array */
+    pivot = upo_quick_sort_median3_partition(base, lo, hi, size, cmp);
+    /* Sorts left half */
+    if (pivot > 0)
+    {
+        upo_quick_sort_median3_cutoff_driver_topdown(base, lo, pivot - 1, size, cmp);
+    }
+    /* Sorts right half */
+    upo_quick_sort_median3_cutoff_driver_topdown(base, pivot + 1, hi, size, cmp);
 }
 
-size_t upo_quick_sort_median3_cutoff_partition(void *base, size_t lo, size_t hi, size_t size, upo_sort_comparator_t cmp)
+size_t upo_quick_sort_median3_partition(void *base, size_t lo, size_t hi, size_t size, upo_sort_comparator_t cmp)
 {
     size_t mid = lo + (hi - lo) / 2;
-
-    unsigned char *array = base;
-    // Assuming that we need to swap many pointers, it's convenient to store such pointers
-    unsigned char *lo_ptr = array + lo * size;
-    unsigned char *mid_ptr = array + mid * size;
-    unsigned char *hi_ptr = array + hi * size;
-
-    // Median selection
+    unsigned char *ptr = base;
+    unsigned char *lo_ptr = ptr + lo * size;
+    unsigned char *mid_ptr = ptr + mid * size;
+    unsigned char *hi_ptr = ptr + hi * size;
+    /* Select the median element among base[lo], base[mid] and base[hi]. */
     if (cmp(lo_ptr, mid_ptr) > 0)
+    {
         upo_swap(lo_ptr, mid_ptr, size);
+    }
     if (cmp(lo_ptr, hi_ptr) > 0)
+    {
         upo_swap(lo_ptr, hi_ptr, size);
+    }
     if (cmp(mid_ptr, hi_ptr) > 0)
+    {
         upo_swap(mid_ptr, hi_ptr, size);
-
-    if (hi - lo + 1 <= 3)
+    }
+    if ((hi - lo + 1) <= 3)
+    {
         return mid;
-
-    //Setting middle element into lo + 1 position
-    upo_swap(mid_ptr, array + (lo + 1) * size, size);
-
+    }
+    /* Put the middle element on position lo+1. */
+    upo_swap(mid_ptr, ptr + (lo + 1) * size, size);
+    /* Now partition the array base[lo+1 .. hi-1] */
     return upo_quick_sort_partition(base, lo + 1, hi - 1, size, cmp);
+}
+
+size_t upo_quick_sort_partition(void *base, size_t lo, size_t hi, size_t size, upo_sort_comparator_t cmp)
+{
+    size_t i = lo;
+    size_t j = hi + 1;
+    unsigned char *ptr = base;
+    unsigned char *pivot_ptr = ptr + lo * size;
+
+    while (1)
+    {
+        do
+        {
+            ++i;
+        } while (i < hi && cmp(ptr + i * size, pivot_ptr) < 0);
+
+        /* Scans right side of the array */
+        do
+        {
+            --j;
+        } while (j > lo && cmp(pivot_ptr, ptr + j * size) < 0);
+        if (i >= j)
+        {
+            break;
+        }
+        upo_swap(ptr + i * size, ptr + j * size, size);
+    }
+    upo_swap(ptr + lo * size, ptr + j * size, size);
+
+    return j;
 }
