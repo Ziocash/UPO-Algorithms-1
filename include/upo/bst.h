@@ -285,7 +285,7 @@ void* upo_bst_min(const upo_bst_t tree);
  *
  * Worst-case complexity: linear in the number `n` of elements, `O(n)`.
  */
-void* upo_bst_max(upo_bst_t tree);
+void* upo_bst_max(const upo_bst_t tree);
 
 /**
  * \brief Removes the key-value pair with the smallest key in the given
