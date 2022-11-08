@@ -900,8 +900,11 @@ void *upo_ht_sepchain_olist_put(upo_ht_sepchain_olist_t ht, void *key, void *val
         upo_ht_sepchain_olist_node_t *new_node = malloc(sizeof(upo_ht_sepchain_olist_node_t));
         new_node->key = key;
         new_node->value = value;
+        if(previous == NULL)
+            ht->slots[hash].head = new_node;
+        else
+            previous->next = new_node;
         new_node->next = node;
-        previous->next = new_node;
         ht->size += 1;
     }
 
@@ -938,7 +941,10 @@ void upo_ht_sepchain_olist_insert(upo_ht_sepchain_olist_t ht, void *key, void *v
         upo_ht_sepchain_olist_node_t *new_node = malloc(sizeof(upo_ht_sepchain_olist_node_t));
         new_node->key = key;
         new_node->value = value;
-        previous->next = new_node;
+        if(previous == NULL)
+            ht->slots[hash].head = new_node;
+        else
+            previous->next = new_node;
         new_node->next = node;
         ht->size += 1;
     }

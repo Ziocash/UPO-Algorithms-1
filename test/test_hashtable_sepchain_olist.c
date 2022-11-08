@@ -1278,6 +1278,111 @@ void test_null()
     upo_ht_sepchain_olist_destroy(ht, 0);
 }
 
+void test_same_hash_order()
+{
+    int keys1[] = {0,1,2,3,4,5,6,7,8,9};
+    int keys997[10];
+    int keys1994[10];
+    int values[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+    int values_upd[] = {9, 8, 7, 6, 5, 4, 3, 2, 1, 0};
+
+    size_t n = (sizeof(keys1) / sizeof(keys1[0]));
+    for(size_t i = 0; i < n; i++)
+    {
+        keys997[i] = keys1[i] + UPO_HT_SEPCHAIN_DEFAULT_CAPACITY;
+        keys1994[i] = keys997[i] + UPO_HT_SEPCHAIN_DEFAULT_CAPACITY;
+    }
+
+    upo_ht_sepchain_olist_t ht = upo_ht_sepchain_olist_create(UPO_HT_SEPCHAIN_DEFAULT_CAPACITY, upo_ht_hash_int_div, int_compare);
+
+    // Inserts normal keys
+    for(size_t i = 0; i < n; i++)
+    {
+        upo_ht_sepchain_olist_insert(ht, &keys1[i], &values[i]);
+    }
+
+    // Inserts keys + double capacity
+    for(size_t i = 0; i < n; i++)
+    {
+        upo_ht_sepchain_olist_insert(ht, &keys1994[i], &values_upd[i]);
+    }
+
+    // Inserts keys + capacity
+    for(size_t i = 0; i < n; i++)
+    {
+        upo_ht_sepchain_olist_insert(ht, &keys997[i], &values_upd[i]);
+    }
+
+    for(size_t i = 0; i < n; i++)
+    {
+        int found = 0;
+        found = upo_ht_sepchain_olist_contains(ht, &keys1[i]);
+
+        assert(found);
+
+        found = upo_ht_sepchain_olist_contains(ht, &keys997[i]);
+
+        assert(found);
+
+        found = upo_ht_sepchain_olist_contains(ht, &keys1994[i]);
+
+        assert(found);
+    }
+
+    for(size_t i = 0; i < n; i++)
+    {
+        upo_ht_sepchain_olist_delete(ht, &keys997[i], 0);
+    }
+
+    for(size_t i = 0; i < n; i++)
+    {
+        upo_ht_sepchain_olist_put(ht, &keys997[i], &values_upd[i]);
+    }
+
+    for(size_t i = 0; i < n; i++)
+    {
+        int found = 0;
+        found = upo_ht_sepchain_olist_contains(ht, &keys1[i]);
+
+        assert(found);
+
+        found = upo_ht_sepchain_olist_contains(ht, &keys997[i]);
+
+        assert(found);
+
+        found = upo_ht_sepchain_olist_contains(ht, &keys1994[i]);
+
+        assert(found);
+    }
+
+    upo_ht_sepchain_olist_clear(ht, 0);
+
+    for(size_t i = 0; i < n; i++)
+    {
+        upo_ht_sepchain_olist_put(ht, &keys997[i], &values_upd[i]);
+    }
+
+    for(size_t i = 0; i < n; i++)
+    {
+        upo_ht_sepchain_olist_put(ht, &keys1994[i], &values_upd[i]);
+    }
+
+    for(size_t i = 0; i < n; i++)
+    {
+        int found = 0;
+
+        found = upo_ht_sepchain_olist_contains(ht, &keys997[i]);
+
+        assert(found);
+
+        found = upo_ht_sepchain_olist_contains(ht, &keys1994[i]);
+
+        assert(found);
+    }
+
+    upo_ht_sepchain_olist_destroy(ht, 0);
+}
+
 int main()
 {
     printf("Test case 'create/destroy'... ");
@@ -1320,6 +1425,10 @@ int main()
     test_null();
     printf("OK\n");
 
+    printf("Test case 'ordered list with same hash'... ");
+    fflush(stdout);
+    test_same_hash_order();
+    printf("OK\n");
 
     return EXIT_SUCCESS;
 }

@@ -109,6 +109,8 @@
         }
     ],
     "files.associations": {
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "limits.h": "c",
+        "stddef.h": "c"
     }
 }
