@@ -3,6 +3,10 @@
 Laboratory course - Sperimental part
 The course provides knowledge about **ADT** or **Abstract Data Types**, sorting algorithms and advanced C use (e.g.: generic pointers).
 
+## Wiki
+
+This repo also provides a [detailed wiki](https://github.com/Ziocash/UPO-Algorithms-1/wiki) about all structures and functions.
+
 ## Requirements
 
 - C standard **C11**
