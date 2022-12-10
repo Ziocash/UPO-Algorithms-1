@@ -292,7 +292,8 @@ void *upo_bst_min(const upo_bst_t tree)
     if (tree->root == NULL)
         return NULL;
 
-    return upo_bst_min_impl(tree->root);
+    upo_bst_node_t *node = upo_bst_min_impl(tree->root);
+    return node != NULL ? node->key : NULL;
 }
 
 void *upo_bst_min_impl(upo_bst_node_t *node)
@@ -302,7 +303,7 @@ void *upo_bst_min_impl(upo_bst_node_t *node)
     else if (node->left != NULL)
         return upo_bst_min_impl(node->left);
     else
-        return node->key;
+        return node;
 }
 
 void *upo_bst_max(const upo_bst_t tree)
@@ -312,7 +313,8 @@ void *upo_bst_max(const upo_bst_t tree)
     if (tree->root == NULL)
         return NULL;
 
-    return upo_bst_max_impl(tree->root);
+    upo_bst_node_t *node = upo_bst_max_impl(tree->root);
+    return node != NULL ? node->key : NULL;
 }
 
 void *upo_bst_max_impl(upo_bst_node_t *node)
@@ -322,7 +324,7 @@ void *upo_bst_max_impl(upo_bst_node_t *node)
     else if (node->right != NULL)
         return upo_bst_max_impl(node->right);
     else
-        return node->key;
+        return node;
 }
 
 void upo_bst_delete_min(upo_bst_t tree, int destroy_data)
@@ -498,7 +500,10 @@ void *upo_bst_predecessor_impl(upo_bst_node_t *node, const void *key, upo_bst_co
     if (node == NULL)
         return NULL;
     if (cmp(node->key, key) == 0)
-        return upo_bst_max_impl(node->left);
+    {
+        upo_bst_node_t *max = upo_bst_max_impl(node->left);
+        return max != NULL ? max->key : NULL;
+    }
 
     else if (cmp(node->key, key) > 0)
         return upo_bst_predecessor_impl(node->left, key, cmp);
