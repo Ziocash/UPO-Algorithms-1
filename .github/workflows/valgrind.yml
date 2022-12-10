@@ -1,0 +1,17 @@
+name: Valgrind
+on:
+  workflow_dispatch:
+    inputs:
+      extra_resolve_options:
+        description: "Extra Resolve Options"
+        required: false
+  schedule:
+    - cron: "0 1 * * *"
+  push:
+  pull_request:
+jobs:
+  valgrind:
+    name: Valgrind
+    uses: steinwurf/valgrind-action/.github/workflows/action.yml@5.0.0
+    with:
+      extra_resolve_options: ${{ github.events.inputs.extra_resolve_options }}
