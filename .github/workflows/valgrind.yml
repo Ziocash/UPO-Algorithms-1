@@ -28,8 +28,7 @@ jobs:
     - name: Test changed files
       if: steps.verify-changed-files.outputs.files_changed == 'true'
       run: |
-        declare -a files
-        files = ${{ steps.verify-changed-files.outputs.changed_files }}
+        files=(${{ steps.verify-changed-files.outputs.changed_files }})
         for i in "${files}"; 
         do valgrind --tool=memcheck --leak-check=full --show-leak-kinds=all "$i";
         done
