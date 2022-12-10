@@ -1,3 +1,9 @@
+<div align="center">
+
+[![CodeQL](https://github.com/Ziocash/UPO-Algorithms-1/actions/workflows/codeql.yml/badge.svg)](https://github.com/Ziocash/UPO-Algorithms-1/actions/workflows/codeql.yml)[![Valgrind](https://github.com/Ziocash/UPO-Algorithms-1/actions/workflows/valgrind.yml/badge.svg)](https://github.com/Ziocash/UPO-Algorithms-1/actions/workflows/valgrind.yml)
+
+</div>
+
 # UPO-Algorithms-1 Repository
 
 Laboratory course - Sperimental part
