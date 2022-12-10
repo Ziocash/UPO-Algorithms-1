@@ -30,6 +30,6 @@ jobs:
       run: |
         declare -a files
         files = ${{ steps.verify-changed-files.outputs.changed_files }}
-        for i in "${files}"; do
-          valgrind --tool=memcheck --leak-check=full --show-leak-kinds=all i
+        for i in "${files}"; 
+        do valgrind --tool=memcheck --leak-check=full --show-leak-kinds=all "$i";
         done
