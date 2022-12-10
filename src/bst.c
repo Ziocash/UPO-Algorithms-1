@@ -302,7 +302,7 @@ void *upo_bst_min_impl(upo_bst_node_t *node)
     else if (node->left != NULL)
         return upo_bst_min_impl(node->left);
     else
-        return node;
+        return node->key;
 }
 
 void *upo_bst_max(const upo_bst_t tree)
@@ -322,7 +322,7 @@ void *upo_bst_max_impl(upo_bst_node_t *node)
     else if (node->right != NULL)
         return upo_bst_max_impl(node->right);
     else
-        return node;
+        return node->key;
 }
 
 void upo_bst_delete_min(upo_bst_t tree, int destroy_data)
