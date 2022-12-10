@@ -17,7 +17,8 @@ jobs:
       run: |
         sudo apt-get -y install valgrind
     - name: Build
-      uses: github/codeql-action/autobuild@v2
+      run: |
+        make all
         
     - name: Test
       run: |
