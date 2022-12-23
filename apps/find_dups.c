@@ -62,6 +62,9 @@ upo_strings_list_t upo_find_idups(const char **strs, size_t n, int ignore_case)
 {
     if (strs == NULL)
         return NULL;
+    if (!ignore_case)
+        return upo_find_dups(strs, n);
+
     upo_strings_list_t list = NULL;
     upo_ht_sepchain_t table = upo_ht_sepchain_create(UPO_HT_SEPCHAIN_DEFAULT_CAPACITY, upo_ht_hash_str_kr2e, str_cmp);
     size_t size = n * sizeof(char *);
@@ -69,19 +72,11 @@ upo_strings_list_t upo_find_idups(const char **strs, size_t n, int ignore_case)
     memset(strs_copy, '\0', size);
     for (size_t i = 0; i < n; i++)
     {
-        if (ignore_case)
-        {
-            strs_copy[i] = upo_to_lower_case(strs[i]);
-            char *dup = NULL;
-            if ((dup = upo_ht_sepchain_put(table, &strs_copy[i], &strs_copy[i])) != NULL)
-                upo_dups_create_list(&list, dup);
-        }
-        else
-        {
-            char *dup = NULL;
-            if ((dup = upo_ht_sepchain_put(table, &strs[i], &strs[i])) != NULL)
-                upo_dups_create_list(&list, dup);
-        }
+        strs_copy[i] = upo_to_lower_case(strs[i]);
+        char *dup = NULL;
+        if ((dup = upo_ht_sepchain_put(table, &strs_copy[i], &strs_copy[i])) != NULL)
+            upo_dups_create_list(&list, &strs[i]);
+        
     }
 
     for (size_t i = 0; i < n; i++)
@@ -103,12 +98,12 @@ void *upo_to_lower_case(const char *src)
     return lowered;
 }
 
-void upo_dups_create_list(upo_strings_list_t *list, char *str)
+void upo_dups_create_list(upo_strings_list_t *list, void *str)
 {
     if (*list == NULL)
     {
         *list = malloc(sizeof(upo_strings_list_node_t));
-        (*list)->string_value = str;
+        (*list)->value = str;
         (*list)->next = NULL;
     }
     else
@@ -117,7 +112,7 @@ void upo_dups_create_list(upo_strings_list_t *list, char *str)
         while (node->next != NULL)
             node = node->next;
         upo_strings_list_node_t *new_node = malloc(sizeof(upo_strings_list_node_t));
-        new_node->string_value = str;
+        new_node->value = str;
         new_node->next = NULL;
         node->next = new_node;
     }
@@ -138,6 +133,17 @@ void upo_destroy_dup_list(upo_strings_list_t *list)
     *list = NULL;
 }
 
+void upo_check_list(upo_strings_list_t list, const char **expected_strs)
+{
+    upo_strings_list_node_t *node = list;
+    size_t index = 0;
+    while (node != NULL)
+    {
+        assert(str_cmp(node->value, &expected_strs[index++]) == 0);
+        node = node->next;
+    }
+}
+
 int main(void)
 {
     printf("Test null... ");
@@ -153,6 +159,8 @@ int main(void)
     const char *strings[] = {"Tre", "tigri", "contro", "tre", "tigri"};
     list = upo_find_dups(strings, sizeof(strings) / sizeof(char *));
     assert(list != NULL);
+    const char *expected[] = {"tigri"};
+    upo_check_list(list, expected);
 
     upo_destroy_dup_list(&list);
 
@@ -162,6 +170,8 @@ int main(void)
     printf("Test duplicates ignoring case on string array... ");
     list = upo_find_idups(strings, sizeof(strings) / sizeof(char *), 1);
     assert(list != NULL);
+    const char *ignore_case_expected[] = {"tre", "tigri"};
+    upo_check_list(list, ignore_case_expected);
 
     upo_destroy_dup_list(&list);
 
@@ -169,6 +179,7 @@ int main(void)
 
     list = upo_find_idups(strings, sizeof(strings) / sizeof(char *), 0);
     assert(list != NULL);
+    upo_check_list(list, expected);
 
     upo_destroy_dup_list(&list);
 
