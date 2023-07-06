@@ -393,4 +393,6 @@ void* upo_bst_get_value_depth(const upo_bst_t tree, const void *key, long *depth
 
 upo_bst_key_list_t upo_bst_keys_le(const upo_bst_t tree, const void *key);
 
+size_t upo_bst_subtree_size(const upo_bst_t tree, const void *key);
+
 #endif /* UPO_BST_H */

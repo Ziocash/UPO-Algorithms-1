@@ -36,6 +36,7 @@ static void test_min_max();
 static void test_delete_min_max();
 static void test_floor_ceiling();
 static void test_bst_property();
+static void test_subtree_size();
 
 int int_compare(const void *a, const void *b)
 {
@@ -1001,6 +1002,45 @@ void test_keys_le()
     upo_bst_destroy(bst, 0);
 }
 
+void test_subtree_size()
+{
+    int keys5[] = {8, 3, 1, 6, 4, 7, 10, 14, 13};
+    int values[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+    size_t n = 0;
+    size_t i;
+    upo_bst_t bst;
+
+    bst = upo_bst_create(int_compare);
+    /*
+     * BST:
+     *         8
+     *        / \
+     *       3   10
+     *      / \    \
+     *     1   6    14
+     *        / \   /
+     *       4   7 13
+     */
+
+    n = sizeof keys5 / sizeof keys5[0];
+    /* Insertion */
+    for (i = 0; i < n; ++i)
+    {
+        upo_bst_insert(bst, &keys5[i], &values[i]);
+    }
+
+    assert(upo_bst_subtree_size(bst, &keys5[0]) == 9);
+    assert(upo_bst_subtree_size(bst, &keys5[1]) == 5);
+    assert(upo_bst_subtree_size(bst, &keys5[2]) == 1);
+
+    int temp_key = 30;
+    assert(upo_bst_subtree_size(bst, &temp_key) == 0);
+
+    upo_bst_clear(bst, 0);
+
+    upo_bst_destroy(bst, 0);
+}
+
 int main()
 {
     printf("Test case 'min/max'... ");
@@ -1046,6 +1086,11 @@ int main()
     printf("Test case 'keys less or equal than'... ");
     fflush(stdout);
     test_keys_le();
+    printf("OK\n");
+
+    printf("Test case 'subtree size'... ");
+    fflush(stdout);
+    test_subtree_size();
     printf("OK\n");
 
     return 0;

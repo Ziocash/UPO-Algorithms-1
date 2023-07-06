@@ -573,6 +573,36 @@ void upo_bst_keys_le_impl(upo_bst_node_t *node, const void *key, upo_bst_key_lis
     }
 }
 
+size_t upo_bst_subtree_size(const upo_bst_t tree, const void *key)
+{
+    if(tree == NULL)
+        return 0;
+    if(tree->root == NULL)
+        return 0;
+
+    return upo_bst_subtree_size_impl(tree->root, key, 0, tree->key_cmp);
+    
+}
+
+size_t upo_bst_subtree_size_impl(const upo_bst_node_t *node, const void *key, int is_subtree, upo_bst_comparator_t cmp)
+{
+    if(node == NULL)
+        return 0;
+
+    if(cmp(key, node->key) == 0)
+    {
+        is_subtree = 1;
+        return is_subtree + upo_bst_subtree_size_impl(node->left, key, is_subtree, cmp) + upo_bst_subtree_size_impl(node->right, key, is_subtree, cmp);
+    }
+    else if(cmp(key, node->key) > 0 && !is_subtree)
+        return is_subtree + upo_bst_subtree_size_impl(node->right, key, is_subtree, cmp);
+    else if(cmp(key, node->key) < 0 && !is_subtree)
+        return is_subtree + upo_bst_subtree_size_impl(node->left, key, is_subtree, cmp);
+    else
+        return is_subtree + upo_bst_subtree_size_impl(node->left, key, is_subtree, cmp) + upo_bst_subtree_size_impl(node->right, key, is_subtree, cmp);
+    return 0;
+}
+
 /**** EXERCISE #2 - END of EXTRA OPERATIONS ****/
 
 upo_bst_comparator_t upo_bst_get_comparator(const upo_bst_t tree)

@@ -104,4 +104,6 @@ static void *upo_bst_get_value_depth_impl(upo_bst_node_t* node, const void *key,
 
 static void upo_bst_keys_le_impl(upo_bst_node_t *node, const void *key, upo_bst_key_list_t *list, upo_bst_comparator_t cmp);
 
+static size_t upo_bst_subtree_size_impl(const upo_bst_node_t *node, const void *key, int is_subtree, upo_bst_comparator_t cmp);
+
 #endif /* UPO_BST_PRIVATE_H */
