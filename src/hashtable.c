@@ -622,6 +622,37 @@ void upo_ht_sepchain_traverse(const upo_ht_sepchain_t ht, upo_ht_visitor_t visit
     }
 }
 
+int upo_ht_sepchain_deletex(const upo_ht_sepchain_t ht, const void *key, int destroy_data)
+{
+   upo_ht_hasher_t hasher = ht->key_hash;
+   upo_ht_comparator_t cmp = ht->key_cmp;
+   size_t hash = hasher(key, ht->capacity);
+   upo_ht_sepchain_list_node_t *previous = NULL;
+   upo_ht_sepchain_list_node_t *node = ht->slots[hash].head;
+
+   while (node != NULL && cmp(key, node->key) != 0)
+   {
+        previous = node;
+        node = node->next;
+   }
+   if(node != NULL)
+   {
+        if(previous != NULL)
+            previous->next = node->next;
+        else
+            ht->slots[hash].head = node->next;
+        
+        if(destroy_data)
+        {
+            free(node->key);
+            free(node->value);
+        }
+        free(node);
+        return 1;
+   }
+   return 0;
+}
+
 upo_ht_key_list_t upo_ht_linprob_keys(const upo_ht_linprob_t ht)
 {
     if (ht == NULL)

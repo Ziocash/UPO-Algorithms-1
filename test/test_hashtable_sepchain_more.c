@@ -39,6 +39,7 @@ static void count_key_visit(void *key, void *value, void *info);
 
 static void test_keys();
 static void test_traverse();
+static void test_deletex();
 
 
 int int_compare(const void *a, const void *b)
@@ -372,6 +373,125 @@ void test_traverse()
     upo_ht_sepchain_destroy(ht, 0);
 }
 
+void test_deletex()
+{
+    int keys1[] = {0,1,2,3,4,5,6,7,8,9};
+    int keys2[] = {0,10,20,30,40,50,60,70,80,90};
+    int keys3[] = {0,1,2,3,4,10,11,12,13,14};
+    int values[] = {0,1,2,3,4,5,6,7,8,9};
+    size_t m = MAX( MAX(sizeof keys1/sizeof keys1[0], sizeof keys1/sizeof keys2[0]), sizeof keys1/sizeof keys3[0] );
+    size_t n = 0;
+    size_t i;
+    upo_ht_sepchain_t ht;
+    size_t key_counter = 0;
+
+    /* HT: empty hash table */
+
+    ht = upo_ht_sepchain_create(UPO_HT_SEPCHAIN_DEFAULT_CAPACITY, upo_ht_hash_int_div, int_compare);
+
+    assert( ht != NULL );
+
+    key_counter = 0;
+    upo_ht_sepchain_deletex(ht, &keys1[0], 0);
+    upo_ht_sepchain_traverse(ht, count_key_visit, &key_counter);
+    assert( key_counter == 0 );
+
+    upo_ht_sepchain_destroy(ht, 0);
+
+    /* HT: no collision */
+
+    ht = upo_ht_sepchain_create(2*m*UPO_HT_SEPCHAIN_DEFAULT_CAPACITY, upo_ht_hash_int_div, int_compare);
+
+    assert( ht != NULL );
+
+    n = sizeof keys1/sizeof keys1[0];
+    /* Insertion */
+    for (i = 0; i < n; ++i)
+    {
+        upo_ht_sepchain_insert(ht, &keys1[i], &values[i]);
+    }
+
+    key_counter = 0;
+    upo_ht_sepchain_deletex(ht, &keys1[0], 0);
+    upo_ht_sepchain_traverse(ht, count_key_visit, &key_counter);
+    assert( key_counter == n - 1 );
+
+    /* Removal */
+    for (i = 0; i < n; ++i)
+    {
+        upo_ht_sepchain_delete(ht, &keys1[i], 0);
+    }
+
+    key_counter = 0;
+    upo_ht_sepchain_deletex(ht, &keys1[0], 0);
+    upo_ht_sepchain_traverse(ht, count_key_visit, &key_counter);
+    assert( key_counter == 0 );
+
+    upo_ht_sepchain_destroy(ht, 0);
+
+    /* HT: all collisions */
+
+    ht = upo_ht_sepchain_create(m*UPO_HT_SEPCHAIN_DEFAULT_CAPACITY, upo_ht_hash_int_div, int_compare);
+
+    assert( ht != NULL );
+
+    n = sizeof keys2/sizeof keys2[0];
+    /* Insertion */
+    for (i = 0; i < n; ++i)
+    {
+        upo_ht_sepchain_insert(ht, &keys2[i], &values[i]);
+    }
+
+    key_counter = 0;
+    upo_ht_sepchain_deletex(ht, &keys2[0], 0);
+    upo_ht_sepchain_traverse(ht, count_key_visit, &key_counter);
+    assert( key_counter == n - 1 );
+
+    /* Removal */
+    for (i = 0; i < n; ++i)
+    {
+        upo_ht_sepchain_delete(ht, &keys2[i], 0);
+    }
+
+    key_counter = 0;
+    upo_ht_sepchain_deletex(ht, &keys1[0], 0);
+    upo_ht_sepchain_traverse(ht, count_key_visit, &key_counter);
+    assert( key_counter == 0 );
+
+    upo_ht_sepchain_destroy(ht, 0);
+
+    /* HT: mix */
+
+    ht = upo_ht_sepchain_create(UPO_HT_SEPCHAIN_DEFAULT_CAPACITY, upo_ht_hash_int_div, int_compare);
+
+    assert( ht != NULL );
+
+    n = sizeof keys3/sizeof keys3[0];
+    /* Insertion */
+    for (i = 0; i < n; ++i)
+    {
+        upo_ht_sepchain_put(ht, &keys3[i], &values[i]);
+    }
+
+    key_counter = 0;
+    upo_ht_sepchain_deletex(ht, &keys3[0], 0);
+    upo_ht_sepchain_traverse(ht, count_key_visit, &key_counter);
+    assert( key_counter == n - 1 );
+
+    /* Removal */
+    for (i = 0; i < n; ++i)
+    {
+        upo_ht_sepchain_delete(ht, &keys3[i], 0);
+    }
+
+    key_counter = 0;
+    upo_ht_sepchain_deletex(ht, &keys3[0], 0);
+    upo_ht_sepchain_traverse(ht, count_key_visit, &key_counter);
+    assert( key_counter == 0 );
+
+    upo_ht_sepchain_destroy(ht, 0);
+}
+
 int main()
 {
     printf("Test case 'keys'... ");
@@ -382,6 +502,11 @@ int main()
     printf("Test case 'traverse'... ");
     fflush(stdout);
     test_traverse();
+    printf("OK\n");
+
+    printf("Test case 'deletex'... ");
+    fflush(stdout);
+    test_deletex();
     printf("OK\n");
 
     return 0;
