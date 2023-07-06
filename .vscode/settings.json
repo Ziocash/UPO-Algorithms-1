@@ -106,11 +106,45 @@
             "cwd": "/home/ziocash/UPO-Algorithms-1/test",
             "binaryPath": "/home/ziocash/UPO-Algorithms-1/test/test_bst_more",
             "binaryArgs": []
+        },
+        {
+            "cwd": "/home/ziocash/content/code/UPO-Algorithms-1/apps",
+            "binaryPath": "/home/ziocash/content/code/UPO-Algorithms-1/apps/find_dups",
+            "binaryArgs": []
+        },
+        {
+            "cwd": "/home/ziocash/content/code/UPO-Algorithms-1/apps",
+            "binaryPath": "/home/ziocash/content/code/UPO-Algorithms-1/apps/postfix_eval",
+            "binaryArgs": [
+                "-f",
+                "/home/ziocash/content/code/UPO-Algorithms-1/data/postfix.txt"
+            ]
+        },
+        {
+            "cwd": "/home/ziocash/content/code/UPO-Algorithms-1/test",
+            "binaryPath": "/home/ziocash/content/code/UPO-Algorithms-1/test/test_bst_more",
+            "binaryArgs": []
+        },
+        {
+            "cwd": "/home/ziocash/content/code/UPO-Algorithms-1/test",
+            "binaryPath": "/home/ziocash/content/code/UPO-Algorithms-1/test/test_bst",
+            "binaryArgs": []
+        },
+        {
+            "cwd": "/home/ziocash/content/code/UPO-Algorithms-1/test",
+            "binaryPath": "/home/ziocash/content/code/UPO-Algorithms-1/test/test_hashtable_linprob",
+            "binaryArgs": []
+        },
+        {
+            "cwd": "/home/ziocash/content/code/UPO-Algorithms-1/test",
+            "binaryPath": "/home/ziocash/content/code/UPO-Algorithms-1/test/test_hashtable_sepchain_more",
+            "binaryArgs": []
         }
     ],
     "files.associations": {
         "stdlib.h": "c",
         "limits.h": "c",
-        "stddef.h": "c"
+        "stddef.h": "c",
+        "stdio.h": "c"
     }
 }
