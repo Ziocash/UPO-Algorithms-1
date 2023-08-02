@@ -23,7 +23,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
 upo_stack_t upo_stack_create()
 {
     upo_stack_t stack = malloc(sizeof(struct upo_stack_s));
@@ -50,36 +49,36 @@ void upo_stack_destroy(upo_stack_t stack, int destroy_data)
 
 void upo_stack_push(upo_stack_t stack, void *data)
 {
-    //Check if stack is not null
-    if(stack != NULL)
+    // Check if stack is not null
+    if (stack != NULL)
     {
-        //Create a node with stack_node_t 
+        // Create a node with stack_node_t
         upo_stack_node_t *node = malloc(sizeof(upo_stack_node_t));
-        //Check if node is allocated (malloc returns null value if something goes wrong)
-        if(node == NULL)
+        // Check if node is allocated (malloc returns null value if something goes wrong)
+        if (node == NULL)
         {
-            perror("Unable to create a stack node: "); 
+            perror("Unable to create a stack node: ");
             abort();
         }
-        //Assign data to temp node
+        // Assign data to temp node
         node->data = data;
-        //Assign stack top to next value
+        // Assign stack top to next value
         node->next = stack->top;
-        //Assign node to stack top
+        // Assign node to stack top
         stack->top = node;
-        //Increase size
+        // Increase size
         stack->size += 1;
     }
 }
 
 void upo_stack_pop(upo_stack_t stack, int destroy_data)
 {
-    if(!upo_stack_is_empty(stack))
+    if (!upo_stack_is_empty(stack))
     {
         upo_stack_node_t *node = stack->top;
         stack->top = stack->top->next;
         stack->size -= 1;
-        if(destroy_data)
+        if (destroy_data)
         {
             free(node->data);
         }
@@ -87,29 +86,25 @@ void upo_stack_pop(upo_stack_t stack, int destroy_data)
     }
 }
 
-void* upo_stack_top(const upo_stack_t stack)
+void *upo_stack_top(const upo_stack_t stack)
 {
-    if(upo_stack_is_empty(stack))
-    {
+    if (upo_stack_is_empty(stack))
         return NULL;
-    }
     return stack->top->data;
 }
 
 int upo_stack_is_empty(const upo_stack_t stack)
 {
-    if(stack != NULL)
+    if (stack != NULL)
         return stack->size > 0 ? 0 : 1;
-    else
-        return 1;        
+    return 1;
 }
 
 size_t upo_stack_size(const upo_stack_t stack)
 {
-    if(!upo_stack_is_empty(stack))
+    if (!upo_stack_is_empty(stack))
         return stack->size;
-    else
-        return 0;    
+    return 0;
 }
 
 void upo_stack_clear(upo_stack_t stack, int destroy_data)
@@ -122,15 +117,15 @@ void upo_stack_clear(upo_stack_t stack, int destroy_data)
      *  1.4 Destroy "node" by invoking "free(node)"
      * 2. Update stack size.
      */
-    while(!upo_stack_is_empty(stack))
+    while (!upo_stack_is_empty(stack))
     {
         upo_stack_node_t *node = stack->top;
         stack->top = stack->top->next;
         stack->size -= 1;
-        if(destroy_data)
+        if (destroy_data)
         {
             free(node->data);
         }
         free(node);
-    }    
+    }
 }
