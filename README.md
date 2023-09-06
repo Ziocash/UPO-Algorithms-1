@@ -6,7 +6,7 @@
 
 # UPO-Algorithms-1 Repository
 
-Laboratory course - Sperimental part
+Laboratory course - Sperimental part.<br/>
 The course provides knowledge about **ADT** or **Abstract Data Types**, sorting algorithms and advanced C use (e.g.: generic pointers).
 
 ## Wiki
