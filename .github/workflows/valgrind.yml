@@ -11,6 +11,9 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v3
+    - name: Check for updates and install them
+      run: |
+        sudo apt-get update && sudo apt-get full-upgrade -y
     - name: Install package
       run: |
         sudo apt-get -y install valgrind
