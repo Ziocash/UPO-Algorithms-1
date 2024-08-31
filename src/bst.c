@@ -509,9 +509,9 @@ void *upo_bst_predecessor_impl(upo_bst_node_t *node, const void *key, upo_bst_co
         return upo_bst_predecessor_impl(node->left, key, cmp);
     else
     {
-        void *previuos = node->key;
+        void *previous = node->key;
         void *result = upo_bst_predecessor_impl(node->right, key, cmp);
-        return result != NULL ? result : previuos;
+        return result != NULL ? result : previous;
     }
     return node->key;
 }
