@@ -13,6 +13,10 @@ The course provides knowledge about **ADT** or **Abstract Data Types**, sorting 
 
 This repo also provides a [detailed wiki](https://github.com/Ziocash/UPO-Algorithms-1/wiki) about all structures and functions.
 
+## Doxygen documentation
+
+This repo also provides a [doxygen documentation](https://ziocash.github.io/UPO-Algorithms-1/) about all structures and functions.
+
 ## Requirements
 
 - C standard **C11**
