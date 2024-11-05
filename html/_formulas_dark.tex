@@ -1,0 +1,75 @@
+\documentclass{article}
+\usepackage{ifthen}
+\usepackage{epsfig}
+\usepackage[utf8]{inputenc}
+\usepackage{xcolor}
+\color{white}
+\pagecolor{black}
+\usepackage{newunicodechar}
+  \newunicodechar{⁻}{${}^{-}$}% Superscript minus
+  \newunicodechar{²}{${}^{2}$}% Superscript two
+  \newunicodechar{³}{${}^{3}$}% Superscript three
+
+\pagestyle{empty}
+\begin{document}
+$\{0,\ldots,m-1\}$
+\pagebreak
+
+\[
+  h(x) = x \bmod m
+\]
+\pagebreak
+
+$y \bmod z$
+\pagebreak
+
+$y / z$
+\pagebreak
+
+\[
+  h(x) = m \lfloor a x \bmod 1 \rfloor
+\]
+\pagebreak
+
+$\lfloor y \rfloor$
+\pagebreak
+
+$y$
+\pagebreak
+
+$y \bmod 1$
+\pagebreak
+
+$y - \lfloor y \rfloor$
+\pagebreak
+
+$\{0,\ldots,p-1\} \mapsto \{0,\ldots,m-1\}$
+\pagebreak
+
+$a \in \{0,\ldots,p-1\}$
+\pagebreak
+
+\[
+    h(k) = h_0 \left( \big(\sum_{i=0}^{\ell-1} k_i\cdot a^i \big) \bmod m \right),
+\]
+\pagebreak
+
+$k=(k_0,\ldots,k_{\ell-1})$
+\pagebreak
+
+$\sim n^2/4$
+\pagebreak
+
+$\sim n^2/2$
+\pagebreak
+
+$n-1$
+\pagebreak
+
+$0$
+\pagebreak
+
+$\Theta(n^2)$
+\pagebreak
+
+\end{document}
