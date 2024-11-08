@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4.2.2
     - name: Check for updates and install them
       run: |
         sudo apt-get update && sudo apt-get full-upgrade -y
@@ -22,7 +22,7 @@ jobs:
         make all
 
     - name: Verify Changed files
-      uses: tj-actions/verify-changed-files@v17
+      uses: tj-actions/verify-changed-files@v20.0.1
       id: verify-changed-files
       with:
         files: |
