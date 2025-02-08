@@ -139,6 +139,7 @@ void *upo_ht_sepchain_put(upo_ht_sepchain_t ht, void *key, void *value)
         node->value = value;
         node->next = ht->slots[hash].head;
         ht->slots[hash].head = node;
+        ht->size += 1;
     }
     else
     {
@@ -168,6 +169,7 @@ void upo_ht_sepchain_insert(upo_ht_sepchain_t ht, void *key, void *value)
         node->value = value;
         node->next = ht->slots[hash].head;
         ht->slots[hash].head = node;
+        ht->size += 1;
     }
 }
 
